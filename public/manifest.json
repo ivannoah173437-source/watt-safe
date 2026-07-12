@@ -1,0 +1,12 @@
+{
+  "name": "WattSafe",
+  "short_name": "WattSafe",
+  "description": "Alerte de coupure électrique pour compteurs prépayés",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FFFFFF",
+  "theme_color": "#FF6B00",
+  "categories": ["utilities", "finance"],
+  "icons": []
+}
