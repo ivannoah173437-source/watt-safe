@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WattSafe - Configuration</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        /* ============================================
+           RESET
+           ============================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #F5F5F5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            min-height: 100vh;
+        }
+
+        /* ============================================
+           CONTAINER
+           ============================================ */
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background: #FFFFFF;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+            display: flex;
+            flex-direction: column;
+            min-height: 90vh;
+            max-height: 600px;
+        }
+
+        /* ============================================
+           HEADER NOIR
+           ============================================ */
+        .header-dark {
+            background: #1A1A2E;
+            padding: 20px 24px 18px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        .header-dark .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-dark .logo .icon {
+            font-size: 24px;
+            color: #FFFFFF;
+        }
+
+        .header-dark .logo h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        .header-dark .logo h2 span {
+            color: #3074F9;
+        }
+
+        .header-dark .step {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        /* ============================================
+           BODY BLANC
+           ============================================ */
+        .body-white {
+            padding: 32px 24px 28px 24px;
+            background: #FFFFFF;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ============================================
+           QUESTION
+           ============================================ */
+        .question {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .question .icon {
+            font-size: 36px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .question h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1A1A2E;
+            line-height: 1.3;
+        }
+
+        .question p {
+            font-size: 14px;
+            color: #6B7A8F;
+            margin-top: 4px;
+        }
+
+        /* ============================================
+           GRILLE DES BOUTONS (1 à 10)
+           ============================================ */
+        .grid-numbers {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .grid-numbers .btn-number {
+            padding: 14px 0;
+            background: #FAFBFC;
+            border: 1.5px solid #E8EDF5;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 700;
+            color: #1A1A2E;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .grid-numbers .btn-number:active {
+            transform: scale(0.95);
+        }
+
+        .grid-numbers .btn-number.selected {
+            background: #1A1A2E;
+            border-color: #1A1A2E;
+            color: #FFFFFF;
+        }
+
+        .grid-numbers .btn-number:hover {
+            border-color: #1A1A2E;
+        }
+
+        /* ============================================
+           NOTE
+           ============================================ */
+        .note {
+            text-align: center;
+            font-size: 13px;
+            color: #6B7A8F;
+            margin-bottom: 20px;
+        }
+
+        .note i {
+            color: #3074F9;
+            margin-right: 6px;
+        }
+
+        /* ============================================
+           BOUTON SUIVANT
+           ============================================ */
+        .btn-next {
+            width: 100%;
+            padding: 14px;
+            background: #1A1A2E;
+            border: none;
+            border-radius: 8px;
+            color: #FFFFFF;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-next.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .btn-next:active {
+            transform: scale(0.98);
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        .footer {
+            text-align: center;
+            padding: 16px 24px;
+            border-top: 1px solid #E8EDF5;
+            color: #B0B8C8;
+            font-size: 12px;
+            flex-shrink: 0;
+            background: #FFFFFF;
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 420px) {
+            .header-dark {
+                padding: 16px 16px 14px 16px;
+            }
+
+            .header-dark .logo h2 {
+                font-size: 16px;
+            }
+
+            .body-white {
+                padding: 24px 16px 20px 16px;
+            }
+
+            .question h2 {
+                font-size: 18px;
+            }
+
+            .grid-numbers {
+                gap: 8px;
+            }
+
+            .grid-numbers .btn-number {
+                padding: 12px 0;
+                font-size: 16px;
+            }
+
+            .btn-next {
+                padding: 12px;
+                font-size: 15px;
+            }
+
+            .container {
+                max-height: 540px;
+                min-height: 80vh;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                border-radius: 20px;
+                max-height: 620px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- ===== HEADER NOIR ===== -->
+        <div class="header-dark">
+            <div class="logo">
+                <span class="icon">⚡</span>
+                <h2>Watt<span>Safe</span></h2>
+            </div>
+            <span class="step">Étape 1/3</span>
+        </div>
+
+        <!-- ===== BODY BLANC ===== -->
+        <div class="body-white">
+
+            <!-- Question -->
+            <div class="question">
+                <span class="icon">📋</span>
+                <h2>De combien de recharges<br>vous souvenez-vous ?</h2>
+                <p>Sélectionnez un nombre</p>
+            </div>
+
+            <!-- Grille 1 à 10 -->
+            <div class="grid-numbers" id="numberGrid">
+                <button class="btn-number" data-value="1">1</button>
+                <button class="btn-number" data-value="2">2</button>
+                <button class="btn-number" data-value="3">3</button>
+                <button class="btn-number" data-value="4">4</button>
+                <button class="btn-number" data-value="5">5</button>
+                <button class="btn-number" data-value="6">6</button>
+                <button class="btn-number" data-value="7">7</button>
+                <button class="btn-number" data-value="8">8</button>
+                <button class="btn-number" data-value="9">9</button>
+                <button class="btn-number" data-value="10">10</button>
+            </div>
+
+            <!-- Note -->
+            <div class="note">
+                <i class="fas fa-lightbulb"></i>
+                Plus vous en entrez, plus la prédiction sera précise
+            </div>
+
+            <!-- Bouton Suivant -->
+            <button class="btn-next disabled" id="btnNext" disabled>
+                Suivant <i class="fas fa-arrow-right"></i>
+            </button>
+
+        </div>
+
+        <!-- ===== FOOTER ===== -->
+        <div class="footer">
+            © 2026 WattSafe
+        </div>
+
+    </div>
+
+    <script>
+        // ============================================
+        // 1. SÉLECTION DU NOMBRE DE RECHARGES
+        // ============================================
+
+        const buttons = document.querySelectorAll('.btn-number');
+        const btnNext = document.getElementById('btnNext');
+        let selectedValue = null;
+
+        buttons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Retirer la sélection de tous les boutons
+                buttons.forEach(b => b.classList.remove('selected'));
+
+                // Ajouter la sélection sur celui cliqué
+                this.classList.add('selected');
+
+                // Enregistrer la valeur
+                selectedValue = parseInt(this.dataset.value);
+
+                // Activer le bouton Suivant
+                btnNext.disabled = false;
+                btnNext.classList.remove('disabled');
+            });
+        });
+
+        // ============================================
+        // 2. BOUTON SUIVANT → PAGE SUIVANTE
+        // ============================================
+
+        btnNext.addEventListener('click', function() {
+            if (this.disabled) return;
+
+            // Sauvegarder le nombre de recharges dans localStorage
+            localStorage.setItem('wattSafeRechargeCount', selectedValue);
+
+            // Rediriger vers la page de saisie
+            window.location.href = 'historique-saisie.html';
+        });
+
+        // ============================================
+        // 3. VÉRIFIER SI L'UTILISATEUR EST CONNECTÉ
+        // ============================================
+
+        const savedUser = localStorage.getItem('wattSafeUser');
+        if (!savedUser) {
+            // Pas d'utilisateur → rediriger vers login
+            window.location.href = 'login.html';
+        }
+
+        console.log('⚡ Page config-recharges chargée');
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WattSafe - Configuration alerte</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #F5F5F5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background: #FFFFFF;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+            display: flex;
+            flex-direction: column;
+            min-height: 75vh;
+            max-height: 520px;
+        }
+
+        .header-dark {
+            background: #1A1A2E;
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        .header-dark .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-dark .logo .icon {
+            font-size: 22px;
+            color: #FFFFFF;
+        }
+
+        .header-dark .logo h2 {
+            font-size: 17px;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        .header-dark .logo h2 span {
+            color: #3074F9;
+        }
+
+        .header-dark .step-label {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .progress-section {
+            padding: 14px 24px 0 24px;
+            background: #FFFFFF;
+            flex-shrink: 0;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 4px;
+            background: #E8EDF5;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-track .progress-fill {
+            height: 100%;
+            background: #3074F9;
+            border-radius: 4px;
+            width: 100%;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: flex-end;
+            font-size: 12px;
+            color: #6B7A8F;
+            margin-top: 4px;
+        }
+
+        .progress-text .current {
+            font-weight: 600;
+            color: #3074F9;
+        }
+
+        .body-steps {
+            padding: 28px 24px 24px 24px;
+            background: #FFFFFF;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .question {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .question .icon {
+            font-size: 40px;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .question h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1A1A2E;
+            line-height: 1.3;
+        }
+
+        .question .sub {
+            font-size: 14px;
+            color: #6B7A8F;
+            margin-top: 4px;
+        }
+
+        .grid-options {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .grid-options .btn-option {
+            padding: 14px 0;
+            background: #FAFBFC;
+            border: 1.5px solid #E8EDF5;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #1A1A2E;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .grid-options .btn-option:active {
+            transform: scale(0.95);
+        }
+
+        .grid-options .btn-option.selected {
+            background: #1A1A2E;
+            border-color: #1A1A2E;
+            color: #FFFFFF;
+        }
+
+        .grid-options .btn-option .sub {
+            display: block;
+            font-size: 10px;
+            font-weight: 400;
+            opacity: 0.5;
+            margin-top: 2px;
+        }
+
+        .grid-options .btn-option.selected .sub {
+            opacity: 0.7;
+        }
+
+        /* ===== MESSAGE D'EXEMPLE ===== */
+        .example {
+            background: #FAFBFC;
+            border-radius: 10px;
+            padding: 16px;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 1px solid #E8EDF5;
+            flex-shrink: 0;
+        }
+
+        .example .icon-big {
+            font-size: 28px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .example .text {
+            font-size: 15px;
+            color: #1A1A2E;
+            line-height: 1.5;
+        }
+
+        .example .text strong {
+            color: #3074F9;
+        }
+
+        .btn-finish {
+            width: 100%;
+            padding: 16px;
+            background: #1A1A2E;
+            border: none;
+            border-radius: 10px;
+            color: #FFFFFF;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: auto;
+        }
+
+        .btn-finish:active {
+            transform: scale(0.98);
+        }
+
+        .btn-finish:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .btn-finish i {
+            font-size: 18px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 14px 24px;
+            border-top: 1px solid #E8EDF5;
+            color: #B0B8C8;
+            font-size: 12px;
+            flex-shrink: 0;
+            background: #FFFFFF;
+        }
+
+        @media (max-width: 420px) {
+            .header-dark {
+                padding: 14px 16px;
+            }
+            .header-dark .logo h2 {
+                font-size: 15px;
+            }
+            .body-steps {
+                padding: 20px 16px 20px 16px;
+            }
+            .question h2 {
+                font-size: 17px;
+            }
+            .grid-options .btn-option {
+                padding: 12px 0;
+                font-size: 14px;
+            }
+            .example .text {
+                font-size: 14px;
+            }
+            .btn-finish {
+                padding: 14px;
+                font-size: 15px;
+            }
+            .container {
+                min-height: 70vh;
+                max-height: 480px;
+            }
+            .progress-section {
+                padding: 10px 16px 0 16px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                border-radius: 20px;
+                max-height: 540px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="header-dark">
+            <div class="logo">
+                <span class="icon">⚡</span>
+                <h2>Watt<span>Safe</span></h2>
+            </div>
+            <span class="step-label">Configuration</span>
+        </div>
+
+        <div class="progress-section">
+            <div class="progress-track">
+                <div class="progress-fill"></div>
+            </div>
+            <div class="progress-text">
+                <span class="current">✅ Étape finale</span>
+            </div>
+        </div>
+
+        <div class="body-steps">
+
+            <div class="question">
+                <span class="icon">🔔</span>
+                <h2>Dans combien de jours avant<br>l'échéance voulez-vous être alerté ?</h2>
+                <span class="sub">Choisissez votre délai</span>
+            </div>
+
+            <div class="grid-options" id="optionsGrid">
+                <button class="btn-option" data-value="1">
+                    1j
+                    <span class="sub">jour</span>
+                </button>
+                <button class="btn-option selected" data-value="3">
+                    3j
+                    <span class="sub">jours</span>
+                </button>
+                <button class="btn-option" data-value="5">
+                    5j
+                    <span class="sub">jours</span>
+                </button>
+                <button class="btn-option" data-value="7">
+                    7j
+                    <span class="sub">jours</span>
+                </button>
+            </div>
+
+            <!-- ===== MESSAGE SIMPLE ===== -->
+            <div class="example" id="exampleMessage">
+                <span class="icon-big">⏰</span>
+                <div class="text">
+                    Vous serez alerté <strong id="delayDisplay">3</strong> jours avant<br>la date d'échéance de votre crédit.
+                </div>
+            </div>
+
+            <button class="btn-finish" id="btnFinish">
+                <i class="fas fa-check-circle"></i> Terminer
+            </button>
+
+        </div>
+
+        <div class="footer">
+            © 2026 WattSafe
+        </div>
+
+    </div>
+
+    <script>
+        // ============================================
+        // 1. RÉCUPÉRER LES DONNÉES
+        // ============================================
+
+        const recharges = JSON.parse(localStorage.getItem('wattSafeRecharges')) || [];
+        let alertDelay = 3;
+
+        // Vérifier que les recharges existent
+        if (recharges.length === 0) {
+            window.location.href = 'historique-saisie.html';
+        }
+
+        // ============================================
+        // 2. METTRE À JOUR LE MESSAGE
+        // ============================================
+
+        function updateMessage(days) {
+            document.getElementById('delayDisplay').textContent = days;
+        }
+
+        // ============================================
+        // 3. GESTION DES OPTIONS
+        // ============================================
+
+        const options = document.querySelectorAll('.btn-option');
+
+        options.forEach(btn => {
+            btn.addEventListener('click', function() {
+                options.forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                alertDelay = parseInt(this.dataset.value);
+                updateMessage(alertDelay);
+            });
+        });
+
+        // ============================================
+        // 4. BOUTON TERMINER
+        // ============================================
+
+        document.getElementById('btnFinish').addEventListener('click', function() {
+            localStorage.setItem('wattSafeAlertDelay', alertDelay);
+
+            const user = JSON.parse(localStorage.getItem('wattSafeUser'));
+            if (user) {
+                user.hasCompletedOnboarding = true;
+                localStorage.setItem('wattSafeUser', JSON.stringify(user));
+            }
+
+            window.location.href = 'dashboard.html';
+        });
+
+        // ============================================
+        // 5. INITIALISATION
+        // ============================================
+
+        updateMessage(3);
+
+        // ============================================
+        // 6. VÉRIFICATION CONNEXION
+        // ============================================
+
+        const savedUser = localStorage.getItem('wattSafeUser');
+        if (!savedUser) {
+            window.location.href = 'login.html';
+        }
+
+        console.log('⚡ Page config-alerte chargée');
+    </script>
+
+</body>
+</html>

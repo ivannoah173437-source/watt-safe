@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WattSafe - Connexion</title>
+
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        /* ============================================
+           RESET
+           ============================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #F5F5F5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            min-height: 100vh;
+        }
+
+        /* ============================================
+           CONTAINER
+           ============================================ */
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            background: #FFFFFF;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+            display: flex;
+            flex-direction: column;
+            min-height: 90vh;
+            max-height: 650px;
+        }
+
+        /* ============================================
+           HEADER NOIR (logo + titre)
+           ============================================ */
+        .header-dark {
+            background: #1A1A2E;
+            padding: 32px 24px 28px 24px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .header-dark .icon {
+            font-size: 44px;
+            display: block;
+        }
+
+        .header-dark h1 {
+            font-size: 26px;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-top: 2px;
+        }
+
+        .header-dark h1 span {
+            color: #3074F9;
+        }
+
+        .header-dark .subtitle {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 2px;
+        }
+
+        /* ============================================
+           BODY BLANC (formulaire + boutons)
+           ============================================ */
+        .body-white {
+            padding: 24px 24px 28px 24px;
+            background: #FFFFFF;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        /* ============================================
+           FORMULAIRE
+           ============================================ */
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #1A1A2E;
+            margin-bottom: 4px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid #E8EDF5;
+            border-radius: 8px;
+            font-size: 15px;
+            color: #1A1A2E;
+            background: #FAFBFC;
+            outline: none;
+            transition: border-color 0.2s ease;
+            -webkit-appearance: none;
+        }
+
+        .form-group input:focus {
+            border-color: #3074F9;
+            background: #FFFFFF;
+        }
+
+        .form-group input::placeholder {
+            color: #B0B8C8;
+        }
+
+        /* ============================================
+           BOUTON CRÉER (NOIR)
+           ============================================ */
+        .btn-create {
+            width: 100%;
+            padding: 14px;
+            background: #1A1A2E;
+            border: none;
+            border-radius: 8px;
+            color: #FFFFFF;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            margin-top: 4px;
+        }
+
+        .btn-create:active {
+            transform: scale(0.98);
+        }
+
+        .btn-create i {
+            margin-right: 8px;
+        }
+
+        /* ============================================
+           SÉPARATEUR
+           ============================================ */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin: 18px 0;
+            color: #B0B8C8;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #E8EDF5;
+        }
+
+        /* ============================================
+           GOOGLE BUTTON
+           ============================================ */
+        .btn-google-wrapper {
+            margin-bottom: 4px;
+        }
+
+        .btn-google-wrapper #google-signin-button {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        /* ============================================
+           LOADING / ERREUR
+           ============================================ */
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 12px;
+            color: #6B7A8F;
+            font-size: 14px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .loading i {
+            color: #3074F9;
+            margin-right: 8px;
+        }
+
+        .error-msg {
+            display: none;
+            margin-top: 12px;
+            padding: 10px 14px;
+            background: #FEE2E2;
+            border-radius: 8px;
+            color: #DC2626;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .error-msg.active {
+            display: block;
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 420px) {
+            .header-dark {
+                padding: 24px 16px 20px 16px;
+            }
+
+            .header-dark .icon {
+                font-size: 36px;
+            }
+
+            .header-dark h1 {
+                font-size: 22px;
+            }
+
+            .body-white {
+                padding: 18px 16px 22px 16px;
+            }
+
+            .form-group input {
+                padding: 10px 12px;
+                font-size: 14px;
+            }
+
+            .btn-create {
+                padding: 12px;
+                font-size: 15px;
+            }
+
+            .login-container {
+                max-height: 580px;
+                min-height: 80vh;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .login-container {
+                border-radius: 20px;
+                max-height: 700px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+
+        <!-- ===== HEADER NOIR (logo ⚡) ===== -->
+        <div class="header-dark">
+            <span class="icon">⚡</span>
+            <h1>Watt<span>Safe</span></h1>
+            <p class="subtitle">Compteurs prépayés</p>
+        </div>
+
+        <!-- ===== BODY BLANC ===== -->
+        <div class="body-white">
+
+            <!-- Formulaire -->
+            <form id="loginForm" onsubmit="handleFormLogin(event)">
+                <div class="form-group">
+                    <label>Nom complet</label>
+                    <input type="text" id="userName" placeholder="Votre nom" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Téléphone</label>
+                    <input type="tel" id="userPhone" placeholder="Ex: 07 12 34 56 78" required>
+                </div>
+
+                <button type="submit" class="btn-create">
+                    <i class="fas fa-user-plus"></i> Créer mon compte
+                </button>
+            </form>
+
+            <!-- Séparateur -->
+            <div class="divider">OU</div>
+
+            <!-- Google -->
+            <div class="btn-google-wrapper" id="google-signin-button"></div>
+
+            <!-- Loading -->
+            <div class="loading" id="loadingMsg">
+                <i class="fas fa-spinner fa-spin"></i> Connexion en cours...
+            </div>
+
+            <!-- Error -->
+            <div class="error-msg" id="errorMsg">
+                <i class="fas fa-exclamation-circle"></i>
+                <span id="errorText">Une erreur est survenue</span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        // ============================================
+        // CONFIGURATION GOOGLE
+        // ============================================
+
+        const CLIENT_ID = "231885026104-i17vefrd4nlj1n2v4son2v5tg8d77hbj.apps.googleusercontent.com";
+
+        window.onload = function() {
+            google.accounts.id.initialize({
+                client_id: CLIENT_ID,
+                callback: handleGoogleResponse,
+                cancel_on_tap_outside: false
+            });
+
+            google.accounts.id.renderButton(
+                document.getElementById("google-signin-button"), {
+                    theme: "outline",
+                    size: "large",
+                    type: "standard",
+                    shape: "rectangular",
+                    logo_alignment: "left",
+                    text: "continue_with",
+                    width: "100%"
+                }
+            );
+        };
+
+        // ============================================
+        // RÉPONSE GOOGLE
+        // ============================================
+
+        function handleGoogleResponse(response) {
+            showLoading();
+
+            try {
+                const payload = JSON.parse(atob(response.credential.split('.')[1]));
+                const userData = {
+                    name: payload.name || payload.given_name || 'Utilisateur',
+                    email: payload.email,
+                    picture: payload.picture || null,
+                    googleId: payload.sub,
+                    phone: null,
+                    hasCompletedOnboarding: false
+                };
+
+                localStorage.setItem('wattSafeUser', JSON.stringify(userData));
+                window.location.href = 'config-recharges.html';
+
+            } catch (error) {
+                showError('Erreur de connexion. Veuillez réessayer.');
+            }
+        }
+
+        // ============================================
+        // FORMULAIRE MANUEL
+        // ============================================
+
+        function handleFormLogin(event) {
+            event.preventDefault();
+            showLoading();
+
+            const name = document.getElementById('userName').value.trim();
+            const phone = document.getElementById('userPhone').value.trim();
+
+            if (!name || !phone) {
+                showError('Veuillez remplir tous les champs.');
+                return;
+            }
+
+            const userData = {
+                name: name,
+                phone: phone,
+                email: null,
+                picture: null,
+                googleId: null,
+                hasCompletedOnboarding: false
+            };
+
+            localStorage.setItem('wattSafeUser', JSON.stringify(userData));
+            window.location.href = 'config-recharges.html';
+        }
+
+        // ============================================
+        // UTILITAIRES
+        // ============================================
+
+        function showLoading() {
+            document.getElementById('loadingMsg').classList.add('active');
+            document.getElementById('errorMsg').classList.remove('active');
+        }
+
+        function showError(message) {
+            document.getElementById('loadingMsg').classList.remove('active');
+            document.getElementById('errorText').textContent = message;
+            document.getElementById('errorMsg').classList.add('active');
+        }
+
+        // Vérifier si déjà connecté
+        const savedUser = localStorage.getItem('wattSafeUser');
+        if (savedUser) {
+            const user = JSON.parse(savedUser);
+            if (user.googleId || user.phone) {
+                window.location.href = 'config-recharges.html';
+            }
+        }
+    </script>
+
+</body>
+</html>
