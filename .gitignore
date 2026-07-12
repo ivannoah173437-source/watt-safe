@@ -20,3 +20,16 @@ node_modules/
 # Fichiers temporaires
 *.tmp
 *.temp
+
+# Fichiers d'environnement (clés API)
+.env
+.env.local
+.env.production
+
+# Node.js (backend)
+server/node_modules/
+server/.env
+
+# Logs
+*.log
+npm-debug.log*
