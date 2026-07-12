@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WattSafe - Alerte de coupure électrique</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <style>
+        /* ========================================
+           1. RESET & VARIABLES
+           ======================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #3074F9;
+            --primary-dark: #1A5CDB;
+            --primary-light: #E8EFFE;
+            --text-dark: #1A1A2E;
+            --text-gray: #6B7A8F;
+            --bg-white: #FFFFFF;
+            --bg-hero: #0A1628;
+            --shadow: 0 8px 40px rgba(48, 116, 249, 0.12);
+            --radius: 16px;
+            --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        /* ========================================
+           THEME CLAIR - CORRIGÉ
+           ======================================== */
+        body.light-mode {
+            --bg-hero: #f0f4ff;
+        }
+
+        body.light-mode .hero {
+            background: #f0f4ff;
+        }
+
+        /* Overlay plus opaque en mode clair pour meilleure lisibilité */
+        body.light-mode .hero-overlay {
+            background: linear-gradient(180deg, rgba(240, 244, 255, 0.3) 0%, rgba(240, 244, 255, 0.92) 100%);
+        }
+
+        /* Texte en noir en mode clair */
+        body.light-mode .hero-title {
+            color: var(--text-dark);
+        }
+
+        body.light-mode .hero-title .highlight {
+            background: linear-gradient(135deg, #3074F9, #1A5CDB);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        body.light-mode .hero-subtitle {
+            color: var(--text-gray);
+        }
+
+        body.light-mode .hero-badge {
+            background: rgba(0, 0, 0, 0.06);
+            color: var(--text-gray);
+            border-color: rgba(0, 0, 0, 0.08);
+        }
+
+        body.light-mode .btn-signup {
+            background: rgba(0, 0, 0, 0.06);
+            border-color: rgba(0, 0, 0, 0.1);
+            color: var(--text-dark);
+        }
+
+        body.light-mode .btn-signup:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        body.light-mode .logo-text {
+            color: var(--text-dark);
+        }
+
+        /* Effet flicker en mode clair - plus subtil */
+        body.light-mode .logo-text {
+            -webkit-animation: text-flicker-in-glow-light 4s linear both;
+            animation: text-flicker-in-glow-light 4s linear both;
+        }
+
+        @-webkit-keyframes text-flicker-in-glow-light {
+            0% { opacity: 0; text-shadow: 0 0 0 rgba(0,0,0,0); }
+            10% { opacity: 0; text-shadow: 0 0 0 rgba(0,0,0,0); }
+            10.1% { opacity: 1; text-shadow: 0 0 20px rgba(48,116,249,0.4); }
+            10.2% { opacity: 0; text-shadow: 0 0 0 rgba(0,0,0,0); }
+            20% { opacity: 0; text-shadow: 0 0 0 rgba(0,0,0,0); }
+            20.1% { opacity: 1; text-shadow: 0 0 20px rgba(48,116,249,0.4); }
+            20.6% { opacity: 0; text-shadow: 0 0 0 rgba(0,0,0,0); }
+            30% { opacity: 0; text-shadow: 0 0 0 rgba(0,0,0,0); }
+            30.1% { opacity: 1; text-shadow: 0 0 20px rgba(48,116,249,0.4); }
+            30.5% { opacity: 1; text-shadow: 0 0 20px rgba(48,116,249,0.4); }
+            30.6% { opacity: 0; text-shadow: 0 0 0 rgba(0,0,0,0); }
+            45% { opacity: 0; text-shadow: 0 0 0 rgba(0,0,0,0); }
+            45.1% { opacity: 1; text-shadow: 0 0 20px rgba(48,116,249,0.4); }
+            50% { opacity: 1; text-shadow: 0 0 20px rgba(48,116,249,0.4); }
+            55% { opacity: 1; text-shadow: 0 0 20px rgba(48,116,249,0.4); }
+            55.1% { opacity: 0; text-shadow: 0 0 0 rgba(0,0,0,0); }
+            57% { opacity: 0; text-shadow: 0 0 0 rgba(0,0,0,0); }
+            57.1% { opacity: 1; text-shadow: 0 0 20px rgba(48,116,249,0.4); }
+            60% { opacity: 1; text-shadow: 0 0 20px rgba(48,116,249,0.4); }
+            60.1% { opacity: 0; text-shadow: 0 0 0 rgba(0,0,0,0); }
+            65% { opacity: 0; text-shadow: 0 0 0 rgba(0,0,0,0); }
+            65.1% { opacity: 1; text-shadow: 0 0 20px rgba(48,116,249,0.4); }
+            75% { opacity: 1; text-shadow: 0 0 20px rgba(48,116,249,0.4); }
+            75.1% { opacity: 0; text-shadow: 0 0 0 rgba(0,0,0,0); }
+            77% { opacity: 0; text-shadow: 0 0 0 rgba(0,0,0,0); }
+            77.1% { opacity: 1; text-shadow: 0 0 20px rgba(48,116,249,0.4); }
+            85% { opacity: 1; text-shadow: 0 0 20px rgba(48,116,249,0.4); }
+            85.1% { opacity: 0; text-shadow: 0 0 0 rgba(0,0,0,0); }
+            86% { opacity: 0; text-shadow: 0 0 0 rgba(0,0,0,0); }
+            86.1% { opacity: 1; text-shadow: 0 0 20px rgba(48,116,249,0.4); }
+            100% { opacity: 1; text-shadow: 0 0 20px rgba(48,116,249,0.4); }
+        }
+
+        @keyframes text-flicker-in-glow-light {
+            0% { opacity: 0; text-shadow: 0 0 0 rgba(0,0,0,0); }
+            10% { opacity: 0; text-shadow: 0 0 0 rgba(0,0,0,0); }
+            10.1% { opacity: 1; text-shadow: 0 0 20px rgba(48,116,249,0.4); }
+            10.2% { opacity: 0; text-shadow: 0 0 0 rgba(0,0,0,0); }
+            20% { opacity: 0; text-shadow: 0 0 0 rgba(0,0,0,0); }
+            20.1% { opacity: 1; text-shadow: 0 0 20px rgba(48,116,249,0.4); }
+            20.6% { opacity: 0; text-shadow: 0 0 0 rgba(0,0,0,0); }
+            30% { opacity: 0; text-shadow: 0 0 0 rgba(0,0,0,0); }
+            30.1% { opacity: 1; text-shadow: 0 0 20px rgba(48,116,249,0.4); }
+            30.5% { opacity: 1; text-shadow: 0 0 20px rgba(48,116,249,0.4); }
+            30.6% { opacity: 0; text-shadow: 0 0 0 rgba(0,0,0,0); }
+            45% { opacity: 0; text-shadow: 0 0 0 rgba(0,0,0,0); }
+            45.1% { opacity: 1; text-shadow: 0 0 20px rgba(48,116,249,0.4); }
+            50% { opacity: 1; text-shadow: 0 0 20px rgba(48,116,249,0.4); }
+            55% { opacity: 1; text-shadow: 0 0 20px rgba(48,116,249,0.4); }
+            55.1% { opacity: 0; text-shadow: 0 0 0 rgba(0,0,0,0); }
+            57% { opacity: 0; text-shadow: 0 0 0 rgba(0,0,0,0); }
+            57.1% { opacity: 1; text-shadow: 0 0 20px rgba(48,116,249,0.4); }
+            60% { opacity: 1; text-shadow: 0 0 20px rgba(48,116,249,0.4); }
+            60.1% { opacity: 0; text-shadow: 0 0 0 rgba(0,0,0,0); }
+            65% { opacity: 0; text-shadow: 0 0 0 rgba(0,0,0,0); }
+            65.1% { opacity: 1; text-shadow: 0 0 20px rgba(48,116,249,0.4); }
+            75% { opacity: 1; text-shadow: 0 0 20px rgba(48,116,249,0.4); }
+            75.1% { opacity: 0; text-shadow: 0 0 0 rgba(0,0,0,0); }
+            77% { opacity: 0; text-shadow: 0 0 0 rgba(0,0,0,0); }
+            77.1% { opacity: 1; text-shadow: 0 0 20px rgba(48,116,249,0.4); }
+            85% { opacity: 1; text-shadow: 0 0 20px rgba(48,116,249,0.4); }
+            85.1% { opacity: 0; text-shadow: 0 0 0 rgba(0,0,0,0); }
+            86% { opacity: 0; text-shadow: 0 0 0 rgba(0,0,0,0); }
+            86.1% { opacity: 1; text-shadow: 0 0 20px rgba(48,116,249,0.4); }
+            100% { opacity: 1; text-shadow: 0 0 20px rgba(48,116,249,0.4); }
+        }
+
+        body.light-mode .footer {
+            background: #f5f7fa;
+            color: var(--text-gray);
+            border-top: 1px solid #E8EDF5;
+        }
+
+        body.light-mode .footer-section h4 {
+            color: var(--text-dark);
+        }
+
+        body.light-mode .footer-section ul li a {
+            color: var(--text-gray);
+        }
+
+        body.light-mode .social-links a {
+            background: rgba(0, 0, 0, 0.06);
+            color: var(--text-dark);
+        }
+
+        body.light-mode .footer-content {
+            border-bottom-color: #E8EDF5;
+        }
+
+        body.light-mode .btn-theme-toggle {
+            background: rgba(0, 0, 0, 0.06);
+            border-color: rgba(0, 0, 0, 0.1);
+            color: var(--text-dark);
+        }
+
+        body.light-mode .btn-theme-toggle:hover {
+            background: rgba(0, 0, 0, 0.12);
+        }
+
+        /* Ajustement du GIF en mode clair (plus lumineux) */
+        body.light-mode .hero-bg {
+            filter: brightness(0.6) saturate(0.5) opacity(0.5);
+        }
+
+        html, body {
+            font-family: var(--font-family);
+            background: var(--bg-white);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ========================================
+           2. SCROLLBAR
+           ======================================== */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f0f0f0;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        /* ========================================
+           3. HEADER
+           ======================================== */
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 20;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 40px;
+            background: transparent;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 20px;
+            box-shadow: 0 4px 20px rgba(48, 116, 249, 0.3);
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -0.5px;
+            /* FLICKER PLUS LONG : 6s au lieu de 4s */
+            -webkit-animation: text-flicker-in-glow 6s linear both;
+            animation: text-flicker-in-glow 6s linear both;
+        }
+
+        /* ===== ANIMATION FLICKER - DURÉE 6s ===== */
+        @-webkit-keyframes text-flicker-in-glow {
+            0% { opacity: 0; text-shadow: 0 0 0 rgba(255,255,255,0); }
+            10% { opacity: 0; text-shadow: 0 0 0 rgba(255,255,255,0); }
+            10.1% { opacity: 1; text-shadow: 0 0 30px rgba(255,255,255,0.8); }
+            10.2% { opacity: 0; text-shadow: 0 0 0 rgba(255,255,255,0); }
+            20% { opacity: 0; text-shadow: 0 0 0 rgba(255,255,255,0); }
+            20.1% { opacity: 1; text-shadow: 0 0 30px rgba(255,255,255,0.8); }
+            20.6% { opacity: 0; text-shadow: 0 0 0 rgba(255,255,255,0); }
+            30% { opacity: 0; text-shadow: 0 0 0 rgba(255,255,255,0); }
+            30.1% { opacity: 1; text-shadow: 0 0 30px rgba(255,255,255,0.8); }
+            30.5% { opacity: 1; text-shadow: 0 0 30px rgba(255,255,255,0.8); }
+            30.6% { opacity: 0; text-shadow: 0 0 0 rgba(255,255,255,0); }
+            45% { opacity: 0; text-shadow: 0 0 0 rgba(255,255,255,0); }
+            45.1% { opacity: 1; text-shadow: 0 0 30px rgba(255,255,255,0.8); }
+            50% { opacity: 1; text-shadow: 0 0 30px rgba(255,255,255,0.8); }
+            55% { opacity: 1; text-shadow: 0 0 30px rgba(255,255,255,0.8); }
+            55.1% { opacity: 0; text-shadow: 0 0 0 rgba(255,255,255,0); }
+            57% { opacity: 0; text-shadow: 0 0 0 rgba(255,255,255,0); }
+            57.1% { opacity: 1; text-shadow: 0 0 30px rgba(255,255,255,0.8); }
+            60% { opacity: 1; text-shadow: 0 0 30px rgba(255,255,255,0.8); }
+            60.1% { opacity: 0; text-shadow: 0 0 0 rgba(255,255,255,0); }
+            65% { opacity: 0; text-shadow: 0 0 0 rgba(255,255,255,0); }
+            65.1% { opacity: 1; text-shadow: 0 0 30px rgba(255,255,255,0.8); }
+            75% { opacity: 1; text-shadow: 0 0 30px rgba(255,255,255,0.8); }
+            75.1% { opacity: 0; text-shadow: 0 0 0 rgba(255,255,255,0); }
+            77% { opacity: 0; text-shadow: 0 0 0 rgba(255,255,255,0); }
+            77.1% { opacity: 1; text-shadow: 0 0 30px rgba(255,255,255,0.8); }
+            85% { opacity: 1; text-shadow: 0 0 30px rgba(255,255,255,0.8); }
+            85.1% { opacity: 0; text-shadow: 0 0 0 rgba(255,255,255,0); }
+            86% { opacity: 0; text-shadow: 0 0 0 rgba(255,255,255,0); }
+            86.1% { opacity: 1; text-shadow: 0 0 30px rgba(255,255,255,0.8); }
+            100% { opacity: 1; text-shadow: 0 0 30px rgba(255,255,255,0.8); }
+        }
+
+        @keyframes text-flicker-in-glow {
+            0% { opacity: 0; text-shadow: 0 0 0 rgba(255,255,255,0); }
+            10% { opacity: 0; text-shadow: 0 0 0 rgba(255,255,255,0); }
+            10.1% { opacity: 1; text-shadow: 0 0 30px rgba(255,255,255,0.8); }
+            10.2% { opacity: 0; text-shadow: 0 0 0 rgba(255,255,255,0); }
+            20% { opacity: 0; text-shadow: 0 0 0 rgba(255,255,255,0); }
+            20.1% { opacity: 1; text-shadow: 0 0 30px rgba(255,255,255,0.8); }
+            20.6% { opacity: 0; text-shadow: 0 0 0 rgba(255,255,255,0); }
+            30% { opacity: 0; text-shadow: 0 0 0 rgba(255,255,255,0); }
+            30.1% { opacity: 1; text-shadow: 0 0 30px rgba(255,255,255,0.8); }
+            30.5% { opacity: 1; text-shadow: 0 0 30px rgba(255,255,255,0.8); }
+            30.6% { opacity: 0; text-shadow: 0 0 0 rgba(255,255,255,0); }
+            45% { opacity: 0; text-shadow: 0 0 0 rgba(255,255,255,0); }
+            45.1% { opacity: 1; text-shadow: 0 0 30px rgba(255,255,255,0.8); }
+            50% { opacity: 1; text-shadow: 0 0 30px rgba(255,255,255,0.8); }
+            55% { opacity: 1; text-shadow: 0 0 30px rgba(255,255,255,0.8); }
+            55.1% { opacity: 0; text-shadow: 0 0 0 rgba(255,255,255,0); }
+            57% { opacity: 0; text-shadow: 0 0 0 rgba(255,255,255,0); }
+            57.1% { opacity: 1; text-shadow: 0 0 30px rgba(255,255,255,0.8); }
+            60% { opacity: 1; text-shadow: 0 0 30px rgba(255,255,255,0.8); }
+            60.1% { opacity: 0; text-shadow: 0 0 0 rgba(255,255,255,0); }
+            65% { opacity: 0; text-shadow: 0 0 0 rgba(255,255,255,0); }
+            65.1% { opacity: 1; text-shadow: 0 0 30px rgba(255,255,255,0.8); }
+            75% { opacity: 1; text-shadow: 0 0 30px rgba(255,255,255,0.8); }
+            75.1% { opacity: 0; text-shadow: 0 0 0 rgba(255,255,255,0); }
+            77% { opacity: 0; text-shadow: 0 0 0 rgba(255,255,255,0); }
+            77.1% { opacity: 1; text-shadow: 0 0 30px rgba(255,255,255,0.8); }
+            85% { opacity: 1; text-shadow: 0 0 30px rgba(255,255,255,0.8); }
+            85.1% { opacity: 0; text-shadow: 0 0 0 rgba(255,255,255,0); }
+            86% { opacity: 0; text-shadow: 0 0 0 rgba(255,255,255,0); }
+            86.1% { opacity: 1; text-shadow: 0 0 30px rgba(255,255,255,0.8); }
+            100% { opacity: 1; text-shadow: 0 0 30px rgba(255,255,255,0.8); }
+        }
+
+        .btn-signup {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 32px;
+            border-radius: 50px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-signup:hover {
+            background: white;
+            color: var(--primary);
+            transform: scale(1.04);
+        }
+
+        /* ========================================
+           BOUTON THEME
+           ======================================== */
+        .btn-theme-toggle {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: white;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        /* ========================================
+           4. HERO AVEC GIF
+           ======================================== */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 100px 24px 80px 24px;
+            overflow: hidden;
+            background: var(--bg-hero);
+        }
+
+        /* GIF de fond */
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            background-image: url('assets/img/electricite.gif');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: brightness(0.35) saturate(0.7);
+        }
+
+        /* Overlay dégradé */
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background: linear-gradient(180deg, rgba(10, 22, 40, 0.2) 0%, rgba(10, 22, 40, 0.85) 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 3;
+            max-width: 800px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            padding: 8px 24px;
+            border-radius: 50px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            margin-bottom: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .hero-badge i {
+            margin-right: 8px;
+            color: #FFD700;
+        }
+
+        .hero-title {
+            font-size: 64px;
+            font-weight: 900;
+            color: white;
+            line-height: 1.05;
+            margin-bottom: 24px;
+            letter-spacing: -2px;
+        }
+
+        .hero-title .highlight {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 22px;
+            color: rgba(255, 255, 255, 0.75);
+            line-height: 1.6;
+            max-width: 550px;
+            margin: 0 auto 40px auto;
+            font-weight: 300;
+        }
+
+        /* ========================================
+           5. BOUTON HERO - BOUNCE TOP
+           ======================================== */
+        .btn-hero {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            padding: 20px 52px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 60px;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 40px rgba(48, 116, 249, 0.35);
+            letter-spacing: 0.3px;
+            -webkit-animation: bounce-top 0.9s both;
+            animation: bounce-top 0.9s both;
+        }
+
+        .btn-hero:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 56px rgba(48, 116, 249, 0.5);
+        }
+
+        .btn-hero:active {
+            transform: scale(0.97);
+        }
+
+        .btn-hero i {
+            font-size: 22px;
+        }
+
+        /* ===== ANIMATION BOUNCE TOP ===== */
+        @-webkit-keyframes bounce-top {
+            0% {
+                -webkit-transform: translateY(-45px);
+                transform: translateY(-45px);
+                -webkit-animation-timing-function: ease-in;
+                animation-timing-function: ease-in;
+                opacity: 0;
+            }
+            24% {
+                opacity: 1;
+            }
+            40% {
+                -webkit-transform: translateY(-24px);
+                transform: translateY(-24px);
+                -webkit-animation-timing-function: ease-in;
+                animation-timing-function: ease-in;
+            }
+            65% {
+                -webkit-transform: translateY(-12px);
+                transform: translateY(-12px);
+                -webkit-animation-timing-function: ease-in;
+                animation-timing-function: ease-in;
+            }
+            82% {
+                -webkit-transform: translateY(-6px);
+                transform: translateY(-6px);
+                -webkit-animation-timing-function: ease-in;
+                animation-timing-function: ease-in;
+            }
+            93% {
+                -webkit-transform: translateY(-4px);
+                transform: translateY(-4px);
+                -webkit-animation-timing-function: ease-in;
+                animation-timing-function: ease-in;
+            }
+            25%,
+            55%,
+            75%,
+            87% {
+                -webkit-transform: translateY(0px);
+                transform: translateY(0px);
+                -webkit-animation-timing-function: ease-out;
+                animation-timing-function: ease-out;
+            }
+            100% {
+                -webkit-transform: translateY(0px);
+                transform: translateY(0px);
+                -webkit-animation-timing-function: ease-out;
+                animation-timing-function: ease-out;
+                opacity: 1;
+            }
+        }
+
+        @keyframes bounce-top {
+            0% {
+                -webkit-transform: translateY(-45px);
+                transform: translateY(-45px);
+                -webkit-animation-timing-function: ease-in;
+                animation-timing-function: ease-in;
+                opacity: 0;
+            }
+            24% {
+                opacity: 1;
+            }
+            40% {
+                -webkit-transform: translateY(-24px);
+                transform: translateY(-24px);
+                -webkit-animation-timing-function: ease-in;
+                animation-timing-function: ease-in;
+            }
+            65% {
+                -webkit-transform: translateY(-12px);
+                transform: translateY(-12px);
+                -webkit-animation-timing-function: ease-in;
+                animation-timing-function: ease-in;
+            }
+            82% {
+                -webkit-transform: translateY(-6px);
+                transform: translateY(-6px);
+                -webkit-animation-timing-function: ease-in;
+                animation-timing-function: ease-in;
+            }
+            93% {
+                -webkit-transform: translateY(-4px);
+                transform: translateY(-4px);
+                -webkit-animation-timing-function: ease-in;
+                animation-timing-function: ease-in;
+            }
+            25%,
+            55%,
+            75%,
+            87% {
+                -webkit-transform: translateY(0px);
+                transform: translateY(0px);
+                -webkit-animation-timing-function: ease-out;
+                animation-timing-function: ease-out;
+            }
+            100% {
+                -webkit-transform: translateY(0px);
+                transform: translateY(0px);
+                -webkit-animation-timing-function: ease-out;
+                animation-timing-function: ease-out;
+                opacity: 1;
+            }
+        }
+
+        /* ========================================
+           6. SECTION BLANCHE
+           ======================================== */
+        .section-white {
+            background: var(--bg-white);
+            padding: 100px 24px 80px 24px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-white .description {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 64px auto;
+        }
+
+        .section-white .description h2 {
+            font-size: 38px;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
+        }
+
+        .section-white .description h2 span {
+            color: var(--primary);
+        }
+
+        .section-white .description p {
+            font-size: 19px;
+            color: var(--text-gray);
+            line-height: 1.7;
+        }
+
+        /* ========================================
+           7. FEATURES
+           ======================================== */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card {
+            background: var(--bg-white);
+            border: 1px solid #E8EDF5;
+            border-radius: var(--radius);
+            padding: 36px 28px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 48px rgba(48, 116, 249, 0.12);
+            border-color: var(--primary);
+        }
+
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--primary-light);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 18px auto;
+            color: var(--primary);
+            font-size: 28px;
+        }
+
+        .feature-card h3 {
+            font-size: 19px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .feature-card p {
+            font-size: 15px;
+            color: var(--text-gray);
+            line-height: 1.6;
+        }
+
+        /* ========================================
+           8. FOOTER
+           ======================================== */
+        .footer {
+            background: var(--text-dark);
+            color: rgba(255, 255, 255, 0.8);
+            padding: 50px 24px 20px 24px;
+        }
+
+        .footer-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-section h4 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: white;
+        }
+
+        .footer-section p {
+            font-size: 14px;
+            line-height: 1.6;
+            opacity: 0.7;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-section ul li a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section ul li a:hover {
+            color: var(--primary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 16px;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            font-size: 13px;
+            opacity: 0.5;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* ========================================
+           9. ANIMATIONS SCROLL REVEAL
+           ======================================== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+
+        /* ========================================
+           10. RESPONSIVE
+           ======================================== */
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px 20px;
+            }
+
+            .logo-text {
+                font-size: 20px;
+            }
+
+            .logo-icon {
+                width: 34px;
+                height: 34px;
+                font-size: 16px;
+            }
+
+            .btn-signup {
+                padding: 8px 18px;
+                font-size: 13px;
+            }
+
+            .btn-theme-toggle {
+                width: 38px;
+                height: 38px;
+                font-size: 15px;
+            }
+
+            .hero-title {
+                font-size: 36px;
+                letter-spacing: -1px;
+            }
+
+            .hero-subtitle {
+                font-size: 17px;
+            }
+
+            .btn-hero {
+                padding: 16px 32px;
+                font-size: 17px;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .section-white {
+                padding: 60px 20px 50px 20px;
+            }
+
+            .section-white .description h2 {
+                font-size: 28px;
+            }
+
+            .section-white .description p {
+                font-size: 16px;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .feature-card {
+                padding: 28px 20px;
+            }
+
+            .hero {
+                min-height: 90vh;
+                padding: 80px 20px 60px 20px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+                text-align: center;
+            }
+
+            .social-links {
+                justify-content: center;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .features {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ======================================== -->
+    <!-- HEADER                                   -->
+    <!-- ======================================== -->
+    <header class="header">
+        <div class="header-left">
+            <div class="logo">
+                <div class="logo-icon">⚡</div>
+                <span class="logo-text">WattSafe</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <button class="btn-theme-toggle" id="themeToggle" aria-label="Changer le thème">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button class="btn-signup" onclick="alert('Redirection vers la page d\'inscription')">
+                <i class="fas fa-user-plus" style="margin-right: 8px;"></i> S'inscrire
+            </button>
+        </div>
+    </header>
+
+    <!-- ======================================== -->
+    <!-- HERO AVEC TON GIF                        -->
+    <!-- ======================================== -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-overlay"></div>
+
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fas fa-bolt"></i> Compteurs prépayés
+            </div>
+
+            <h1 class="hero-title">
+                Votre compteur vous coupe<br>
+                <span class="highlight">sans prévenir ?</span>
+            </h1>
+
+            <p class="hero-subtitle">
+                Soyez alerté avant la coupure. Estimez la date d'échéance<br>
+                de votre crédit et rechargez au bon moment.
+            </p>
+
+            <button class="btn-hero" id="installBtn">
+                <i class="fas fa-download"></i> INSTALLER L'APP
+            </button>
+        </div>
+    </section>
+
+    <!-- ======================================== -->
+    <!-- SECTION BLANCHE                          -->
+    <!-- ======================================== -->
+    <section class="section-white">
+
+        <div class="description reveal">
+            <h2>Une application <span>simple et efficace</span></h2>
+            <p>
+                WattSafe estime la date d'échéance de votre crédit en fonction
+                de vos habitudes de consommation. Vous recevez une alerte avant
+                la coupure, et vous pouvez recharger directement depuis l'application.
+            </p>
+        </div>
+
+        <div class="features">
+            <div class="feature-card reveal reveal-delay-1">
+                <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                <h3>Estimation précise</h3>
+                <p>Calcul basé sur vos recharges passées avec un algorithme intelligent.</p>
+            </div>
+            <div class="feature-card reveal reveal-delay-2">
+                <div class="feature-icon"><i class="fas fa-bell"></i></div>
+                <h3>Alerte avant coupure</h3>
+                <p>Choisissez votre délai et recevez une notification avant l'échéance.</p>
+            </div>
+            <div class="feature-card reveal reveal-delay-3">
+                <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
+                <h3>Paiement Mobile Money</h3>
+                <p>Rechargez directement via Orange Money, MTN ou Moov.</p>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- ======================================== -->
+    <!-- FOOTER                                   -->
+    <!-- ======================================== -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>⚡ WattSafe</h4>
+                <p>Votre alerte avant coupure électrique.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Liens utiles</h4>
+                <ul>
+                    <li><a href="#" onclick="alert('Page À propos')">À propos</a></li>
+                    <li><a href="#" onclick="alert('Page Contact')">Contact</a></li>
+                    <li><a href="#" onclick="alert('Page FAQ')">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Suivez-nous</h4>
+                <div class="social-links">
+                    <a href="#" onclick="alert('Facebook')"><i class="fab fa-facebook"></i></a>
+                    <a href="#" onclick="alert('Twitter')"><i class="fab fa-twitter"></i></a>
+                    <a href="#" onclick="alert('LinkedIn')"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 WattSafe — Tous droits réservés</p>
+        </div>
+    </footer>
+
+    <!-- ======================================== -->
+    <!-- SCRIPTS                                  -->
+    <!-- ======================================== -->
+    <script>
+        // ============================================
+        // 1. ANIMATIONS AU SCROLL
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, {
+                threshold: 0.15,
+                rootMargin: '0px 0px -30px 0px'
+            });
+            
+            reveals.forEach(el => observer.observe(el));
+        });
+
+        // ============================================
+        // 2. GESTION DU THEME LIGHT/DARK
+        // ============================================
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        if (savedTheme === 'light') {
+            body.classList.add('light-mode');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('light-mode');
+            const isLight = body.classList.contains('light-mode');
+            themeToggle.innerHTML = isLight ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        });
+
+        // ============================================
+        // 3. GESTION DU BOUTON INSTALLER (PWA)
+        // ============================================
+        let deferredPrompt;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            console.log('📱 L\'application peut être installée');
+        });
+
+        document.getElementById('installBtn').addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const result = await deferredPrompt.userChoice;
+                if (result.outcome === 'accepted') {
+                    console.log('✅ App installée avec succès');
+                    alert('✅ WattSafe a été installé avec succès !');
+                } else {
+                    console.log('❌ Installation refusée');
+                }
+                deferredPrompt = null;
+            } else {
+                alert('📱 Ouvrez ce site dans Chrome ou Safari, puis appuyez sur "Ajouter à l\'écran d\'accueil"');
+            }
+        });
+
+        // ============================================
+        // 4. DÉTECTION SI L'APP EST DÉJÀ INSTALLÉE
+        // ============================================
+        if (window.matchMedia('(display-mode: standalone)').matches) {
+            const btn = document.getElementById('installBtn');
+            btn.innerHTML = '<i class="fas fa-rocket"></i> Ouvrir l\'application';
+        }
+
+        console.log('⚡ WattSafe chargé avec succès !');
+    </script>
+
+</body>
+</html>
