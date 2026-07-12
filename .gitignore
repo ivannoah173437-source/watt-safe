@@ -1,0 +1,22 @@
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Dépendances
+node_modules/
+
+# Fichiers de log
+*.log
+
+# Fichiers d'environnement (clés API, etc.)
+.env
+.env.local
+.env.production
+
+# Éditeurs
+.vscode/
+.idea/
+
+# Fichiers temporaires
+*.tmp
+*.temp
