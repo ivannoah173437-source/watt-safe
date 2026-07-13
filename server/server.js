@@ -1,11 +1,11 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const paymentRoutes = require('./routes/payment');
+
 
 // Charger les variables d'environnement
 dotenv.config();
-
+const paymentRoutes = require('./routes/payment');
 const app = express();
 const PORT = process.env.PORT || 3000;
 

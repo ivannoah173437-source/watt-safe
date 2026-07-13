@@ -5,7 +5,10 @@ const router = express.Router();
 // Récupérer les variables d'environnement
 const GENIUSPAY_API_KEY = process.env.GENIUSPAY_API_KEY;
 const GENIUSPAY_SECRET = process.env.GENIUSPAY_SECRET;
-const GENIUSPAY_URL = process.env.GENIUSPAY_URL;
+const GENIUSPAY_URL = process.env.GENIUSPAY_URL || 'https://geniuspay.ci/api/v1/merchant/payments';
+console.log('🔑 API Key:', GENIUSPAY_API_KEY ? '✅ Chargée' : '❌ Manquante');
+console.log('🔑 Secret:', GENIUSPAY_SECRET ? '✅ Chargé' : '❌ Manquant');
+console.log('🔗 URL:', GENIUSPAY_URL);
 
 // Route : Initier un paiement
 router.post('/initiate', async (req, res) => {
