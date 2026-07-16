@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WattSafe - Profil</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        /* ============================================
+           RESET
+           ============================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #F5F5F5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            min-height: 100vh;
+            transition: background 0.3s ease;
+        }
+
+        body.dark-mode {
+            background: #0A0A0A !important;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            background: #FFFFFF;
+            border-radius: 28px;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+            padding: 24px 20px 16px 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 85vh;
+            max-height: 750px;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        body.dark-mode .container {
+            background: #14141E;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* ============================================
+           HEADER
+           ============================================ */
+        .header-dark {
+            background: #1A1A2E;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            border-radius: 28px 28px 0 0;
+            margin: -24px -20px 16px -20px;
+            padding: 18px 20px 16px 20px;
+        }
+
+        body.dark-mode .header-dark {
+            background: #0A0A12;
+        }
+
+        .header-dark .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-dark .logo .icon {
+            font-size: 20px;
+            color: #FFFFFF;
+        }
+
+        .header-dark .logo h2 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        .header-dark .logo h2 span {
+            color: #3074F9;
+        }
+
+        .header-dark .back-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: none;
+            color: #FFFFFF;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .header-dark .back-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* ============================================
+           BODY
+           ============================================ */
+        .body-steps {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 0 0 0 0;
+        }
+
+        /* ============================================
+           PROFIL CARD
+           ============================================ */
+        .profile-card {
+            text-align: center;
+            padding: 24px 16px 20px 16px;
+            background: #FAFBFC;
+            border-radius: 16px;
+            border: 1px solid #E8EDF5;
+            margin-bottom: 20px;
+            flex-shrink: 0;
+        }
+
+        body.dark-mode .profile-card {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.06);
+        }
+
+        .profile-card .avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: #3074F9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px auto;
+            font-size: 28px;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        .profile-card .name {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1A1A2E;
+        }
+
+        body.dark-mode .profile-card .name {
+            color: #FFFFFF;
+        }
+
+        .profile-card .sub {
+            font-size: 13px;
+            color: #6B7A8F;
+            margin-top: 2px;
+        }
+
+        body.dark-mode .profile-card .sub {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* ============================================
+           SECTION
+           ============================================ */
+        .section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #6B7A8F;
+            margin-bottom: 10px;
+            flex-shrink: 0;
+        }
+
+        body.dark-mode .section-title {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            background: #FAFBFC;
+            border-radius: 12px;
+            border: 1px solid #E8EDF5;
+            margin-bottom: 8px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        body.dark-mode .menu-item {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.06);
+        }
+
+        .menu-item:hover {
+            border-color: #3074F9;
+        }
+
+        body.dark-mode .menu-item:hover {
+            border-color: rgba(48, 116, 249, 0.4);
+        }
+
+        .menu-item .left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .menu-item .left .icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #E8EFFE;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #3074F9;
+            font-size: 16px;
+        }
+
+        body.dark-mode .menu-item .left .icon {
+            background: rgba(48, 116, 249, 0.15);
+        }
+
+        .menu-item .left .text {
+            font-size: 14px;
+            font-weight: 500;
+            color: #1A1A2E;
+        }
+
+        body.dark-mode .menu-item .left .text {
+            color: #FFFFFF;
+        }
+
+        .menu-item .left .sub-text {
+            font-size: 12px;
+            color: #6B7A8F;
+        }
+
+        body.dark-mode .menu-item .left .sub-text {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .menu-item .right {
+            color: #6B7A8F;
+            font-size: 14px;
+        }
+
+        body.dark-mode .menu-item .right {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* ============================================
+           BOUTON RÉINITIALISER
+           ============================================ */
+        .btn-danger {
+            width: 100%;
+            padding: 14px;
+            background: transparent;
+            border: 1.5px solid #EF4444;
+            border-radius: 12px;
+            color: #EF4444;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .btn-danger:hover {
+            background: #FEF2F2;
+            transform: translateY(-1px);
+        }
+
+        body.dark-mode .btn-danger:hover {
+            background: rgba(220, 38, 38, 0.15);
+        }
+
+        .btn-danger:active {
+            transform: scale(0.98);
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        .footer {
+            text-align: center;
+            padding: 12px 0 0 0;
+            color: #B0B8C8;
+            font-size: 11px;
+            flex-shrink: 0;
+            margin-top: 12px;
+            border-top: 1px solid #E8EDF5;
+        }
+
+        body.dark-mode .footer {
+            border-color: rgba(255, 255, 255, 0.06);
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* ============================================
+           MODAL CONFIRMATION
+           ============================================ */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-box {
+            background: #FFFFFF;
+            border-radius: 20px;
+            padding: 28px 24px;
+            max-width: 360px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.2);
+            animation: modalSlideUp 0.3s ease;
+        }
+
+        body.dark-mode .modal-box {
+            background: #1A1A2E;
+        }
+
+        @keyframes modalSlideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-box .icon {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .modal-box h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1A1A2E;
+            margin-bottom: 6px;
+        }
+
+        body.dark-mode .modal-box h3 {
+            color: #FFFFFF;
+        }
+
+        .modal-box p {
+            font-size: 14px;
+            color: #6B7A8F;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        body.dark-mode .modal-box p {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal-actions .btn-modal {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .modal-actions .btn-modal:active {
+            transform: scale(0.97);
+        }
+
+        .modal-actions .btn-modal-cancel {
+            background: #FAFBFC;
+            color: #6B7A8F;
+            border: 1px solid #E8EDF5;
+        }
+
+        body.dark-mode .modal-actions .btn-modal-cancel {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.06);
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .modal-actions .btn-modal-cancel:hover {
+            background: #F0F2F5;
+        }
+
+        body.dark-mode .modal-actions .btn-modal-cancel:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .modal-actions .btn-modal-danger {
+            background: #EF4444;
+            color: #FFFFFF;
+        }
+
+        .modal-actions .btn-modal-danger:hover {
+            background: #DC2626;
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 480px) {
+            body {
+                padding: 0;
+                align-items: stretch;
+            }
+
+            .container {
+                max-width: none;
+                border-radius: 0;
+                min-height: 100vh;
+                max-height: none;
+                padding: 0 0 16px 0;
+            }
+
+            .header-dark {
+                border-radius: 0;
+                margin: 0 0 16px 0;
+                padding: 14px 16px;
+            }
+
+            .header-dark .logo h2 {
+                font-size: 15px;
+            }
+
+            .body-steps {
+                padding: 0 16px 16px 16px;
+            }
+
+            .profile-card .avatar {
+                width: 60px;
+                height: 60px;
+                font-size: 24px;
+            }
+
+            .profile-card .name {
+                font-size: 18px;
+            }
+
+            .menu-item {
+                padding: 12px 14px;
+            }
+
+            .modal-box {
+                padding: 24px 20px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 520px;
+                min-height: 70vh;
+                max-height: 780px;
+                padding: 28px 24px 20px 24px;
+                border-radius: 32px;
+            }
+
+            .header-dark {
+                border-radius: 32px 32px 0 0;
+                margin: -28px -24px 16px -24px;
+                padding: 20px 24px 18px 24px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .container {
+                max-width: 560px;
+                min-height: 65vh;
+                max-height: 800px;
+                padding: 32px 28px 24px 28px;
+                border-radius: 36px;
+            }
+
+            .header-dark {
+                border-radius: 36px 36px 0 0;
+                margin: -32px -28px 16px -28px;
+                padding: 22px 28px 20px 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- ===== HEADER ===== -->
+        <div class="header-dark">
+            <div class="logo">
+                <span class="icon">⚡</span>
+                <h2>Watt<span>Safe</span></h2>
+            </div>
+            <button class="back-btn" onclick="window.location.href='dashboard.html'">
+                <i class="fas fa-arrow-left"></i> Retour
+            </button>
+        </div>
+
+        <!-- ===== BODY ===== -->
+        <div class="body-steps">
+
+            <!-- ===== PROFIL CARD ===== -->
+            <div class="profile-card">
+                <div class="avatar" id="userAvatar">U</div>
+                <div class="name" id="userName">Utilisateur</div>
+                <div class="sub" id="userSub">Compteur prépayé</div>
+            </div>
+
+            <!-- ===== MENU ===== -->
+            <div class="section-title">⚙️ Paramètres</div>
+
+            <div class="menu-item" onclick="toggleTheme()">
+                <div class="left">
+                    <div class="icon"><i class="fas fa-moon" id="themeIcon"></i></div>
+                    <div>
+                        <div class="text" id="themeLabel">Thème</div>
+                        <div class="sub-text" id="themeStatus">Clair</div>
+                    </div>
+                </div>
+                <div class="right">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+
+            <div class="menu-item" onclick="window.location.href='alerte.html'">
+                <div class="left">
+                    <div class="icon"><i class="fas fa-bell"></i></div>
+                    <div>
+                        <div class="text">Alerte</div>
+                        <div class="sub-text" id="alertStatus">Configurer votre délai</div>
+                    </div>
+                </div>
+                <div class="right">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+
+            <!-- ===== ACTIONS ===== -->
+            <div class="section-title" style="margin-top:8px;">⚠️ Actions</div>
+
+            <button class="btn-danger" id="resetBtn">
+                <i class="fas fa-trash-alt"></i> Réinitialiser les données
+            </button>
+
+            <!-- ===== FOOTER ===== -->
+            <div class="footer">
+                © 2026 WattSafe · Version 1.0
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ===== MODAL CONFIRMATION ===== -->
+    <div class="modal-overlay" id="resetModal">
+        <div class="modal-box">
+            <span class="icon">⚠️</span>
+            <h3>Réinitialiser toutes les données ?</h3>
+            <p>Cette action supprimera définitivement toutes vos recharges, votre solde et votre historique.</p>
+            <div class="modal-actions">
+                <button class="btn-modal btn-modal-cancel" id="modalCancel">Annuler</button>
+                <button class="btn-modal btn-modal-danger" id="modalConfirm">Réinitialiser</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // 1. AFFICHER LES INFOS UTILISATEUR
+        // ============================================
+
+        const user = JSON.parse(localStorage.getItem('wattSafeUser'));
+        if (!user) {
+            window.location.href = 'historique-saisie.html';
+        }
+
+        const name = user.name || 'Utilisateur';
+        document.getElementById('userName').textContent = name;
+        document.getElementById('userAvatar').textContent = name.charAt(0).toUpperCase();
+
+        // ============================================
+        // 2. THEME
+        // ============================================
+
+        const body = document.body;
+        const themeIcon = document.getElementById('themeIcon');
+        const themeLabel = document.getElementById('themeLabel');
+        const themeStatus = document.getElementById('themeStatus');
+
+        let isDark = localStorage.getItem('dashboardTheme') === 'dark';
+
+        function updateThemeUI() {
+            if (isDark) {
+                body.classList.add('dark-mode');
+                themeIcon.className = 'fas fa-sun';
+                themeStatus.textContent = 'Sombre';
+            } else {
+                body.classList.remove('dark-mode');
+                themeIcon.className = 'fas fa-moon';
+                themeStatus.textContent = 'Clair';
+            }
+        }
+
+        function toggleTheme() {
+            isDark = !isDark;
+            localStorage.setItem('dashboardTheme', isDark ? 'dark' : 'light');
+            updateThemeUI();
+            document.body.classList.toggle('dark-mode', isDark);
+        }
+
+        updateThemeUI();
+
+        // ============================================
+        // 3. STATUT ALERTE
+        // ============================================
+
+        const alertDelay = parseInt(localStorage.getItem('wattSafeAlertDelay')) || 3;
+        document.getElementById('alertStatus').textContent = `Alerte ${alertDelay} jours avant`;
+
+        // ============================================
+        // 4. RÉINITIALISATION
+        // ============================================
+
+        const resetBtn = document.getElementById('resetBtn');
+        const resetModal = document.getElementById('resetModal');
+        const modalCancel = document.getElementById('modalCancel');
+        const modalConfirm = document.getElementById('modalConfirm');
+
+        resetBtn.addEventListener('click', () => {
+            resetModal.classList.add('active');
+        });
+
+        modalCancel.addEventListener('click', () => {
+            resetModal.classList.remove('active');
+        });
+
+        resetModal.addEventListener('click', (e) => {
+            if (e.target === resetModal) {
+                resetModal.classList.remove('active');
+            }
+        });
+
+        modalConfirm.addEventListener('click', () => {
+            // Supprimer toutes les données
+            localStorage.removeItem('wattSafeUser');
+            localStorage.removeItem('wattSafeRecharges');
+            localStorage.removeItem('wattSafeRechargeCount');
+            localStorage.removeItem('wattSafeBalance');
+            localStorage.removeItem('wattSafeHistorique');
+            localStorage.removeItem('wattSafeAlertDelay');
+            localStorage.removeItem('wattSafeLastRecharge');
+            localStorage.removeItem('wattSafeLastRechargeDate');
+            localStorage.removeItem('dashboardTheme');
+
+            resetModal.classList.remove('active');
+
+            // Rediriger vers l'accueil
+            window.location.href = 'index.html';
+        });
+
+        console.log('👤 Page profil chargée');
+        console.log(`👋 Utilisateur : ${name}`);
+        console.log(`⏰ Délai alerte : ${alertDelay} jours`);
+    </script>
+
+</body>
+</html>

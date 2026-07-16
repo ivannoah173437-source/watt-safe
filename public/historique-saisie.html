@@ -40,7 +40,6 @@
             max-height: 90vh;
         }
 
-        /* ===== HEADER ===== */
         .header-dark {
             background: #1A1A2E;
             padding: 16px 20px;
@@ -77,7 +76,6 @@
             font-weight: 500;
         }
 
-        /* ===== ZONE DE DÉFILEMENT ===== */
         .scroll-area {
             flex: 1;
             overflow-y: auto;
@@ -96,7 +94,6 @@
             border-radius: 4px;
         }
 
-        /* ===== INSTRUCTION ===== */
         .instruction {
             background: #FFF8E1;
             border-radius: 8px;
@@ -118,7 +115,6 @@
             color: #1A1A2E;
         }
 
-        /* ===== SECTION ===== */
         .section {
             margin-bottom: 20px;
             padding-bottom: 16px;
@@ -145,7 +141,22 @@
             margin-bottom: 10px;
         }
 
-        /* ===== GRILLE NOMBRES ===== */
+        .form-group input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid #E8EDF5;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+            background: #FAFBFC;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-group input:focus {
+            border-color: #3074F9;
+            background: #FFFFFF;
+        }
+
         .grid-numbers {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -174,13 +185,18 @@
             color: #FFFFFF;
         }
 
-        /* ===== RECHARGE BLOCK ===== */
+        .grid-numbers .btn-number:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
         .recharge-block {
             background: #FAFBFC;
             border-radius: 10px;
             padding: 16px;
             margin-bottom: 8px;
             border-left: 3px solid #3074F9;
+            transition: border-color 0.3s ease;
         }
 
         .recharge-block .recharge-header {
@@ -188,6 +204,8 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 6px;
         }
 
         .recharge-block .recharge-header h4 {
@@ -203,6 +221,23 @@
 
         .recharge-block .recharge-header .status.done {
             color: #3074F9;
+        }
+
+        .recharge-block .recharge-header .btn-modify {
+            font-size: 11px;
+            padding: 2px 10px;
+            background: transparent;
+            border: 1px solid #F59E0B;
+            border-radius: 12px;
+            color: #F59E0B;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .recharge-block .recharge-header .btn-modify:hover {
+            background: #F59E0B;
+            color: white;
         }
 
         .form-row {
@@ -236,6 +271,11 @@
 
         .form-group input:focus {
             border-color: #3074F9;
+        }
+
+        .form-group input:disabled {
+            background: #F0F2F5;
+            opacity: 0.7;
         }
 
         .form-group input::placeholder {
@@ -280,7 +320,6 @@
             cursor: not-allowed;
         }
 
-        /* ===== RÉSUMÉ ===== */
         .summary-box {
             background: #1A1A2E;
             border-radius: 12px;
@@ -358,7 +397,6 @@
             cursor: not-allowed;
         }
 
-        /* ===== FOOTER ===== */
         .footer {
             text-align: center;
             padding: 12px 20px;
@@ -369,7 +407,6 @@
             background: #FFFFFF;
         }
 
-        /* ===== RESPONSIVE ===== */
         @media (max-width: 420px) {
             .header-dark {
                 padding: 12px 16px;
@@ -407,7 +444,6 @@
 
     <div class="container">
 
-        <!-- ===== HEADER ===== -->
         <div class="header-dark">
             <div class="logo">
                 <span class="icon">⚡</span>
@@ -416,16 +452,23 @@
             <span class="step-label" id="stepLabel">Saisie des recharges</span>
         </div>
 
-        <!-- ===== ZONE DE DÉFILEMENT ===== -->
         <div class="scroll-area" id="scrollArea">
 
-            <!-- ===== INSTRUCTION ===== -->
             <div class="instruction">
                 <i class="fas fa-info-circle"></i>
                 <span>Saisissez vos recharges de la plus <strong>ANCIENNE</strong> à la plus <strong>RÉCENTE</strong></span>
             </div>
 
-            <!-- ===== ÉTAPE 1 : NOMBRE DE RECHARGES ===== -->
+            <!-- ===== SECTION : NOM DE L'UTILISATEUR ===== -->
+            <div class="section" id="sectionName">
+                <div class="section-title">👤 Votre nom</div>
+                <div class="form-group">
+                    <input type="text" id="userNameInput" placeholder="Entrez votre nom" 
+                           style="width:100%; padding:12px 14px; border:1.5px solid #E8EDF5; border-radius:8px; font-size:15px; outline:none; background:#FAFBFC; transition:border-color 0.2s ease;">
+                </div>
+            </div>
+
+            <!-- ===== SECTION : NOMBRE DE RECHARGES ===== -->
             <div class="section" id="sectionCount">
                 <div class="section-title">📋 De combien de recharges vous souvenez-vous ?</div>
                 <div class="grid-numbers" id="numberGrid">
@@ -442,15 +485,11 @@
                 </div>
             </div>
 
-            <!-- ===== CONTENEUR POUR RECHARGES (AJOUT DYNAMIQUE) ===== -->
             <div id="rechargeContainer"></div>
-
-            <!-- ===== CONTENEUR POUR RÉSUMÉ (AJOUT DYNAMIQUE) ===== -->
             <div id="summaryContainer"></div>
 
         </div>
 
-        <!-- ===== FOOTER ===== -->
         <div class="footer">
             © 2026 WattSafe
         </div>
@@ -465,7 +504,7 @@
         let totalRecharges = 0;
         let currentIndex = 0;
         let rechargesData = [];
-        let isComplete = false;
+        let isProcessing = false;
 
         // ============================================
         // RÉFÉRENCES
@@ -483,27 +522,50 @@
 
         numberGrid.addEventListener('click', function(e) {
             const btn = e.target.closest('.btn-number');
-            if (!btn) return;
+            if (!btn || btn.disabled || isProcessing) return;
 
-            numberGrid.querySelectorAll('.btn-number').forEach(b => b.classList.remove('selected'));
+            // Vérifier que le nom est rempli
+            const userName = document.getElementById('userNameInput')?.value?.trim();
+            if (!userName) {
+                alert('👤 Veuillez entrer votre nom avant de commencer.');
+                document.getElementById('userNameInput').focus();
+                return;
+            }
+
+            isProcessing = true;
+
+            numberGrid.querySelectorAll('.btn-number').forEach(b => b.disabled = true);
             btn.classList.add('selected');
 
             totalRecharges = parseInt(btn.dataset.value);
             currentIndex = 0;
             rechargesData = [];
 
-            // Ajouter la première recharge
             addRechargeSection(0);
             stepLabel.textContent = `Recharge 1/${totalRecharges}`;
 
-            // Scroll vers le bas
             setTimeout(() => {
                 scrollArea.scrollTop = scrollArea.scrollHeight;
+                isProcessing = false;
             }, 100);
         });
 
         // ============================================
-        // 2. AJOUTER UNE SECTION RECHARGE
+        // 2. SUPPRIMER LE RÉSUMÉ EXISTANT
+        // ============================================
+
+        function removeExistingSummary() {
+            const existingSummary = document.querySelector('.summary-box');
+            if (existingSummary) {
+                const section = existingSummary.closest('.section');
+                if (section) {
+                    section.remove();
+                }
+            }
+        }
+
+        // ============================================
+        // 3. AJOUTER UNE SECTION RECHARGE
         // ============================================
 
         function addRechargeSection(index) {
@@ -538,14 +600,12 @@
 
             rechargeContainer.appendChild(div);
 
-            // Écouteurs
             const montantInput = document.getElementById(`montant-${index}`);
             const dureeInput = document.getElementById(`duree-${index}`);
             const consoDisplay = document.getElementById(`conso-${index}`).querySelector('.value');
             const status = document.getElementById(`status-${index}`);
             const btnValidate = document.getElementById(`validate-${index}`);
 
-            // Désactiver le bouton par défaut
             btnValidate.disabled = true;
 
             function updateRecharge() {
@@ -565,7 +625,6 @@
             montantInput.addEventListener('input', updateRecharge);
             dureeInput.addEventListener('input', updateRecharge);
 
-            // Validation de la recharge
             btnValidate.addEventListener('click', function() {
                 const montant = parseFloat(montantInput.value);
                 const duree = parseFloat(dureeInput.value);
@@ -575,41 +634,62 @@
                     return;
                 }
 
-                // Sauvegarder
                 rechargesData[index] = { montant, duree };
 
-                // Marquer comme validée
                 status.textContent = '✅ Validée';
                 status.className = 'status done';
                 div.style.borderLeft = '3px solid #00C853';
                 btnValidate.disabled = true;
+                btnValidate.textContent = '✅ Validée';
                 montantInput.disabled = true;
                 dureeInput.disabled = true;
 
-                // Si c'est la dernière, afficher le résumé
-                if (index === totalRecharges - 1) {
+                const modifyBtn = document.createElement('button');
+                modifyBtn.textContent = 'Modifier';
+                modifyBtn.className = 'btn-modify';
+                modifyBtn.addEventListener('click', function() {
+                    montantInput.disabled = false;
+                    dureeInput.disabled = false;
+                    btnValidate.disabled = false;
+                    btnValidate.textContent = 'Mettre à jour';
+                    status.textContent = '⬜ À modifier';
+                    status.className = 'status';
+                    div.style.borderLeft = '3px solid #F59E0B';
+                    rechargesData[index] = null;
+                    modifyBtn.remove();
+                    removeExistingSummary();
+                    numberGrid.querySelectorAll('.btn-number').forEach(b => b.disabled = false);
+                });
+                div.querySelector('.recharge-header').appendChild(modifyBtn);
+
+                const allValidated = rechargesData.every(r => r !== null) && rechargesData.length === totalRecharges;
+
+                if (allValidated) {
+                    removeExistingSummary();
                     setTimeout(() => {
                         addSummarySection();
                         stepLabel.textContent = 'Terminé 🎉';
                     }, 300);
                 } else {
-                    // Ajouter la recharge suivante
-                    const nextIndex = index + 1;
-                    setTimeout(() => {
-                        addRechargeSection(nextIndex);
-                        stepLabel.textContent = `Recharge ${nextIndex+1}/${totalRecharges}`;
-                        scrollArea.scrollTop = scrollArea.scrollHeight;
-                    }, 300);
+                    if (index < totalRecharges - 1) {
+                        const nextIndex = index + 1;
+                        setTimeout(() => {
+                            addRechargeSection(nextIndex);
+                            stepLabel.textContent = `Recharge ${nextIndex+1}/${totalRecharges}`;
+                            scrollArea.scrollTop = scrollArea.scrollHeight;
+                        }, 300);
+                    }
                 }
             });
         }
 
         // ============================================
-        // 3. AJOUTER LE RÉSUMÉ
+        // 4. AJOUTER LE RÉSUMÉ
         // ============================================
 
         function addSummarySection() {
-            // Calcul de la moyenne pondérée
+            removeExistingSummary();
+
             let sommeScores = 0;
             let sommeConsoScore = 0;
 
@@ -645,7 +725,6 @@
 
             summaryContainer.appendChild(div);
 
-            // Remplir les détails des recharges
             const summaryItems = div.querySelector('#summaryItems');
             rechargesData.forEach((r, i) => {
                 const item = document.createElement('div');
@@ -657,29 +736,26 @@
                 summaryItems.appendChild(item);
             });
 
-            // Bouton Confirmer
             document.getElementById('btnConfirm').addEventListener('click', function() {
-                // Sauvegarder
+                // Récupérer le nom
+                const userName = document.getElementById('userNameInput')?.value?.trim() || 'Utilisateur';
+
+                // Créer un utilisateur automatique (sans téléphone)
+                const userData = {
+                    name: userName,
+                    hasCompletedOnboarding: true
+                };
+                localStorage.setItem('wattSafeUser', JSON.stringify(userData));
+
                 localStorage.setItem('wattSafeRecharges', JSON.stringify(rechargesData));
                 localStorage.setItem('wattSafeRechargeCount', totalRecharges);
 
-                // Rediriger
                 window.location.href = 'config-alerte.html';
             });
 
-            // Scroll vers le résumé
             setTimeout(() => {
                 scrollArea.scrollTop = scrollArea.scrollHeight;
             }, 200);
-        }
-
-        // ============================================
-        // 4. VÉRIFICATION CONNEXION
-        // ============================================
-
-        const savedUser = localStorage.getItem('wattSafeUser');
-        if (!savedUser) {
-            window.location.href = 'login.html';
         }
 
         console.log('⚡ Page de saisie progressive (ajout en bas)');

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WattSafe - Confirmation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #F0F2F5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 400px;
+            width: 100%;
+            background: #FFFFFF;
+            border-radius: 32px;
+            padding: 48px 32px 40px 32px;
+            text-align: center;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        .icon {
+            font-size: 72px;
+            margin-bottom: 16px;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1A1A2E;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #6B7A8F;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        .details {
+            background: #FAFBFC;
+            border-radius: 16px;
+            padding: 16px 20px;
+            margin: 20px 0 28px 0;
+            border: 1px solid #E8EDF5;
+            text-align: left;
+        }
+
+        .details .row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 15px;
+        }
+
+        .details .row .label {
+            color: #6B7A8F;
+        }
+
+        .details .row .value {
+            font-weight: 600;
+            color: #1A1A2E;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 16px 40px;
+            background: #1A1A2E;
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            width: 100%;
+            transition: background 0.2s ease;
+        }
+
+        .btn:hover {
+            background: #2A2A4E;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn i {
+            margin-right: 10px;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 32px 20px 28px 20px;
+                border-radius: 24px;
+            }
+
+            .icon {
+                font-size: 56px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="icon">✅</div>
+        <h1>Paiement réussi !</h1>
+        <p class="subtitle">Votre recharge a été effectuée avec succès.</p>
+
+        <div class="details" id="detailsContainer">
+            <div class="row">
+                <span class="label">Montant</span>
+                <span class="value" id="amountDisplay">-- FCFA</span>
+            </div>
+            <div class="row">
+                <span class="label">Nouveau solde</span>
+                <span class="value" id="balanceDisplay">-- FCFA</span>
+            </div>
+            <div class="row">
+                <span class="label">Date</span>
+                <span class="value" id="dateDisplay">--</span>
+            </div>
+        </div>
+
+        <a href="/dashboard.html" class="btn">
+            <i class="fas fa-arrow-left"></i> Retour au dashboard
+        </a>
+    </div>
+
+    <script>
+        // Récupérer le montant depuis l'URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const amount = parseInt(urlParams.get('amount')) || 0;
+
+        // Récupérer le solde actuel
+        let currentBalance = parseInt(localStorage.getItem('wattSafeBalance')) || 0;
+
+        // Mettre à jour le solde
+        if (amount > 0) {
+            currentBalance += amount;
+            localStorage.setItem('wattSafeBalance', currentBalance);
+            localStorage.setItem('wattSafeLastRecharge', amount);
+            localStorage.setItem('wattSafeLastRechargeDate', new Date().toISOString());
+        }
+
+        // Afficher les informations
+        document.getElementById('amountDisplay').textContent = amount.toLocaleString() + ' FCFA';
+        document.getElementById('balanceDisplay').textContent = currentBalance.toLocaleString() + ' FCFA';
+        document.getElementById('dateDisplay').textContent = new Date().toLocaleDateString('fr-FR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        console.log(`💰 Nouveau solde : ${currentBalance} FCFA`);
+        console.log(`📊 Dernière recharge : ${amount} FCFA`);
+    </script>
+
+</body>
+</html>

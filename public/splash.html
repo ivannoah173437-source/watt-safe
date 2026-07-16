@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WattSafe</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1A1A2E;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .splash-container {
+            text-align: center;
+            animation: fadeIn 1s ease;
+        }
+
+        .splash-container .icon {
+            font-size: 72px;
+            display: block;
+            margin-bottom: 12px;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .splash-container h1 {
+            font-size: 36px;
+            font-weight: 800;
+            color: #FFFFFF;
+            letter-spacing: -0.5px;
+        }
+
+        .splash-container h1 span {
+            color: #3074F9;
+        }
+
+        .splash-container .sub {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 4px;
+        }
+
+        .loader {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .loader .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #3074F9;
+            animation: bounce 1.4s ease-in-out infinite both;
+        }
+
+        .loader .dot:nth-child(1) { animation-delay: -0.32s; }
+        .loader .dot:nth-child(2) { animation-delay: -0.16s; }
+        .loader .dot:nth-child(3) { animation-delay: 0s; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        @media (max-width: 480px) {
+            .splash-container .icon {
+                font-size: 56px;
+            }
+
+            .splash-container h1 {
+                font-size: 28px;
+            }
+
+            .splash-container .sub {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="splash-container">
+        <span class="icon">⚡</span>
+        <h1>Watt<span>Safe</span></h1>
+        <p class="sub">Compteurs prépayés</p>
+        <div class="loader">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // VÉRIFICATION DE CONNEXION
+        // ============================================
+
+        // Attendre 2 secondes pour l'effet splash
+        setTimeout(() => {
+            const user = localStorage.getItem('wattSafeUser');
+            
+            if (user) {
+                try {
+                    const userData = JSON.parse(user);
+                    // Vérifier si l'utilisateur a fini l'onboarding
+                    if (userData.hasCompletedOnboarding || userData.googleId) {
+                        console.log('👤 Utilisateur connecté → dashboard');
+                        window.location.href = 'dashboard.html';
+                        return;
+                    }
+                } catch (e) {}
+            }
+            
+            // Nouvel utilisateur → Index (page d'accueil)
+            console.log('👤 Nouvel utilisateur → index');
+            window.location.href = 'index.html';
+        }, 2000);
+    </script>
+</body>
+</html>

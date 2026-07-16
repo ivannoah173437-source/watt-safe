@@ -32,7 +32,7 @@
         }
 
         /* ========================================
-           THEME CLAIR - CORRIGÉ
+           THEME CLAIR
            ======================================== */
         body.light-mode {
             --bg-hero: #f0f4ff;
@@ -42,12 +42,10 @@
             background: #f0f4ff;
         }
 
-        /* Overlay plus opaque en mode clair pour meilleure lisibilité */
         body.light-mode .hero-overlay {
-            background: linear-gradient(180deg, rgba(240, 244, 255, 0.3) 0%, rgba(240, 244, 255, 0.92) 100%);
+            background: linear-gradient(180deg, rgba(240, 244, 255, 0.2) 0%, rgba(240, 244, 255, 0.85) 100%);
         }
 
-        /* Texte en noir en mode clair */
         body.light-mode .hero-title {
             color: var(--text-dark);
         }
@@ -69,22 +67,10 @@
             border-color: rgba(0, 0, 0, 0.08);
         }
 
-        body.light-mode .btn-signup {
-            background: rgba(0, 0, 0, 0.06);
-            border-color: rgba(0, 0, 0, 0.1);
-            color: var(--text-dark);
-        }
-
-        body.light-mode .btn-signup:hover {
-            background: var(--primary);
-            color: white;
-        }
-
         body.light-mode .logo-text {
             color: var(--text-dark);
         }
 
-        /* Effet flicker en mode clair - plus subtil */
         body.light-mode .logo-text {
             -webkit-animation: text-flicker-in-glow-light 4s linear both;
             animation: text-flicker-in-glow-light 4s linear both;
@@ -191,11 +177,6 @@
             background: rgba(0, 0, 0, 0.12);
         }
 
-        /* Ajustement du GIF en mode clair (plus lumineux) */
-        body.light-mode .hero-bg {
-            filter: brightness(0.6) saturate(0.5) opacity(0.5);
-        }
-
         html, body {
             font-family: var(--font-family);
             background: var(--bg-white);
@@ -272,12 +253,10 @@
             font-weight: 800;
             color: white;
             letter-spacing: -0.5px;
-            /* FLICKER PLUS LONG : 6s au lieu de 4s */
             -webkit-animation: text-flicker-in-glow 6s linear both;
             animation: text-flicker-in-glow 6s linear both;
         }
 
-        /* ===== ANIMATION FLICKER - DURÉE 6s ===== */
         @-webkit-keyframes text-flicker-in-glow {
             0% { opacity: 0; text-shadow: 0 0 0 rgba(255,255,255,0); }
             10% { opacity: 0; text-shadow: 0 0 0 rgba(255,255,255,0); }
@@ -346,30 +325,6 @@
             100% { opacity: 1; text-shadow: 0 0 30px rgba(255,255,255,0.8); }
         }
 
-        .btn-signup {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 12px 32px;
-            border-radius: 50px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            letter-spacing: 0.3px;
-        }
-
-        .btn-signup:hover {
-            background: white;
-            color: var(--primary);
-            transform: scale(1.04);
-        }
-
-        /* ========================================
-           BOUTON THEME
-           ======================================== */
         .btn-theme-toggle {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(12px);
@@ -393,7 +348,7 @@
         }
 
         /* ========================================
-           4. HERO AVEC GIF
+           4. HERO
            ======================================== */
         .hero {
             position: relative;
@@ -407,24 +362,44 @@
             background: var(--bg-hero);
         }
 
-        /* GIF de fond */
         .hero-bg {
             position: absolute;
             inset: 0;
             z-index: 0;
-            background-image: url('assets/img/electricite.gif');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            filter: brightness(0.35) saturate(0.7);
+            background: linear-gradient(135deg, #0A1628 0%, #1A2A6C 25%, #3074F9 50%, #1A2A6C 75%, #0A1628 100%);
+            background-size: 400% 400%;
+            animation: gradientMove 10s ease-in-out infinite alternate;
         }
 
-        /* Overlay dégradé */
-        .hero-overlay {
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .hero-pattern {
             position: absolute;
             inset: 0;
             z-index: 1;
-            background: linear-gradient(180deg, rgba(10, 22, 40, 0.2) 0%, rgba(10, 22, 40, 0.85) 100%);
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(48, 116, 249, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(48, 116, 249, 0.03) 0%, transparent 40%),
+                radial-gradient(circle at 50% 80%, rgba(48, 116, 249, 0.04) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            background: linear-gradient(180deg, rgba(10, 22, 40, 0.1) 0%, rgba(10, 22, 40, 0.8) 100%);
+        }
+
+        body.light-mode .hero-pattern {
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(48, 116, 249, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(48, 116, 249, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 50% 80%, rgba(48, 116, 249, 0.06) 0%, transparent 50%);
         }
 
         .hero-content {
@@ -478,7 +453,7 @@
         }
 
         /* ========================================
-           5. BOUTON HERO - BOUNCE TOP
+           5. BOUTON HERO - COMMENCER
            ======================================== */
         .btn-hero {
             display: inline-flex;
@@ -513,7 +488,6 @@
             font-size: 22px;
         }
 
-        /* ===== ANIMATION BOUNCE TOP ===== */
         @-webkit-keyframes bounce-top {
             0% {
                 -webkit-transform: translateY(-45px);
@@ -522,9 +496,7 @@
                 animation-timing-function: ease-in;
                 opacity: 0;
             }
-            24% {
-                opacity: 1;
-            }
+            24% { opacity: 1; }
             40% {
                 -webkit-transform: translateY(-24px);
                 transform: translateY(-24px);
@@ -549,10 +521,7 @@
                 -webkit-animation-timing-function: ease-in;
                 animation-timing-function: ease-in;
             }
-            25%,
-            55%,
-            75%,
-            87% {
+            25%, 55%, 75%, 87% {
                 -webkit-transform: translateY(0px);
                 transform: translateY(0px);
                 -webkit-animation-timing-function: ease-out;
@@ -575,9 +544,7 @@
                 animation-timing-function: ease-in;
                 opacity: 0;
             }
-            24% {
-                opacity: 1;
-            }
+            24% { opacity: 1; }
             40% {
                 -webkit-transform: translateY(-24px);
                 transform: translateY(-24px);
@@ -602,10 +569,7 @@
                 -webkit-animation-timing-function: ease-in;
                 animation-timing-function: ease-in;
             }
-            25%,
-            55%,
-            75%,
-            87% {
+            25%, 55%, 75%, 87% {
                 -webkit-transform: translateY(0px);
                 transform: translateY(0px);
                 -webkit-animation-timing-function: ease-out;
@@ -621,7 +585,195 @@
         }
 
         /* ========================================
-           6. SECTION BLANCHE
+           6. BOUTON FLOTTANT (en bas à droite de la hero)
+           ======================================== */
+        .btn-float {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 30;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            animation: floatPulse 2.5s ease-in-out infinite;
+        }
+
+        .btn-float:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .btn-float:active {
+            transform: scale(0.92);
+        }
+
+        .btn-float .fa-download {
+            font-size: 24px;
+        }
+
+        @keyframes floatPulse {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+
+        .btn-float.scrolling {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #3074F9;
+            border-color: #3074F9;
+            color: white;
+            box-shadow: 0 4px 20px rgba(48, 116, 249, 0.4);
+            animation: none;
+        }
+
+        .btn-float.scrolling:hover {
+            background: #1A5CDB;
+        }
+
+        body.light-mode .btn-float {
+            background: rgba(0, 0, 0, 0.06);
+            border-color: rgba(0, 0, 0, 0.08);
+            color: #1A1A2E;
+        }
+
+        body.light-mode .btn-float:hover {
+            background: rgba(0, 0, 0, 0.12);
+        }
+
+        body.light-mode .btn-float.scrolling {
+            background: #3074F9;
+            border-color: #3074F9;
+            color: white;
+        }
+
+        /* ========================================
+           7. MODAL D'INSTALLATION
+           ======================================== */
+        .install-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .install-modal.active {
+            display: flex;
+        }
+
+        .install-modal-content {
+            background: #1A1A2E;
+            border-radius: 24px;
+            padding: 32px 28px;
+            max-width: 360px;
+            width: 100%;
+            text-align: center;
+            color: #FFFFFF;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
+            animation: modalSlideUp 0.3s ease;
+        }
+
+        @keyframes modalSlideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .install-modal-content .modal-icon {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .install-modal-content h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .install-modal-content p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .modal-btn:active {
+            transform: scale(0.97);
+        }
+
+        .modal-btn-cancel {
+            background: rgba(255, 255, 255, 0.06);
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .modal-btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-btn-confirm {
+            background: #3074F9;
+            color: white;
+        }
+
+        .modal-btn-confirm:hover {
+            background: #1A5CDB;
+        }
+
+        body.light-mode .install-modal-content {
+            background: #FFFFFF;
+            color: #1A1A2E;
+        }
+
+        body.light-mode .install-modal-content p {
+            color: #6B7A8F;
+        }
+
+        body.light-mode .modal-btn-cancel {
+            background: #F0F2F5;
+            color: #6B7A8F;
+        }
+
+        body.light-mode .modal-btn-cancel:hover {
+            background: #E8EDF5;
+        }
+
+        /* ========================================
+           8. SECTION BLANCHE
            ======================================== */
         .section-white {
             background: var(--bg-white);
@@ -655,7 +807,7 @@
         }
 
         /* ========================================
-           7. FEATURES
+           9. FEATURES
            ======================================== */
         .features {
             display: grid;
@@ -707,7 +859,7 @@
         }
 
         /* ========================================
-           8. FOOTER
+           10. FOOTER
            ======================================== */
         .footer {
             background: var(--text-dark);
@@ -792,7 +944,7 @@
         }
 
         /* ========================================
-           9. ANIMATIONS SCROLL REVEAL
+           11. ANIMATIONS SCROLL REVEAL
            ======================================== */
         .reveal {
             opacity: 0;
@@ -810,7 +962,7 @@
         .reveal-delay-3 { transition-delay: 0.3s; }
 
         /* ========================================
-           10. RESPONSIVE
+           12. RESPONSIVE
            ======================================== */
         @media (max-width: 768px) {
             .header {
@@ -825,11 +977,6 @@
                 width: 34px;
                 height: 34px;
                 font-size: 16px;
-            }
-
-            .btn-signup {
-                padding: 8px 18px;
-                font-size: 13px;
             }
 
             .btn-theme-toggle {
@@ -852,6 +999,23 @@
                 font-size: 17px;
                 width: 100%;
                 justify-content: center;
+            }
+
+            .btn-float {
+                width: 48px;
+                height: 48px;
+                font-size: 20px;
+                bottom: 24px;
+                right: 24px;
+            }
+
+            .btn-float .fa-download {
+                font-size: 20px;
+            }
+
+            .btn-float.scrolling {
+                bottom: 16px;
+                right: 16px;
             }
 
             .section-white {
@@ -891,6 +1055,33 @@
             }
         }
 
+        @media (max-width: 480px) {
+            .btn-float {
+                width: 44px;
+                height: 44px;
+                font-size: 18px;
+                bottom: 16px;
+                right: 16px;
+            }
+
+            .btn-float .fa-download {
+                font-size: 18px;
+            }
+
+            .btn-float.scrolling {
+                bottom: 12px;
+                right: 12px;
+            }
+
+            .install-modal-content {
+                padding: 24px 20px;
+            }
+
+            .modal-actions {
+                flex-direction: column;
+            }
+        }
+
         @media (min-width: 769px) and (max-width: 1024px) {
             .features {
                 grid-template-columns: repeat(3, 1fr);
@@ -915,17 +1106,15 @@
             <button class="btn-theme-toggle" id="themeToggle" aria-label="Changer le thème">
                 <i class="fas fa-moon"></i>
             </button>
-            <button class="btn-signup" onclick="window.location.href='login.html'">
-                <i class="fas fa-user-plus" style="margin-right: 8px;"></i> S'inscrire
-            </button>
         </div>
     </header>
 
     <!-- ======================================== -->
-    <!-- HERO AVEC TON GIF                        -->
+    <!-- HERO                                     -->
     <!-- ======================================== -->
     <section class="hero">
         <div class="hero-bg"></div>
+        <div class="hero-pattern"></div>
         <div class="hero-overlay"></div>
 
         <div class="hero-content">
@@ -943,45 +1132,52 @@
                 de votre crédit et rechargez au bon moment.
             </p>
 
-            <button class="btn-hero" id="installBtn">
-                <i class="fas fa-download"></i> INSTALLER L'APP
+            <!-- ===== BOUTON PRINCIPAL "COMMENCER" ===== -->
+            <button class="btn-hero" id="startBtn">
+                <i class="fas fa-play"></i> COMMENCER
             </button>
         </div>
+
+        <!-- ===== BOUTON FLOTTANT (en bas à droite) ===== -->
+        <button class="btn-float" id="installFloatBtn" aria-label="Installer l'app">
+            <i class="fas fa-download"></i>
+        </button>
     </section>
 
     <!-- ======================================== -->
     <!-- SECTION BLANCHE                          -->
     <!-- ======================================== -->
-    <section class="section-white">
+<section class="section-white">
 
-        <div class="description reveal">
-            <h2>Une application <span>simple et efficace</span></h2>
-            <p>
-                WattSafe estime la date d'échéance de votre crédit en fonction
-                de vos habitudes de consommation. Vous recevez une alerte avant
-                la coupure, et vous pouvez recharger directement depuis l'application.
-            </p>
+    <div class="description reveal">
+        <h2>Une application <span>simple et efficace</span></h2>
+        <p>
+            WattSafe estime la date d'échéance de votre crédit en fonction
+            de vos habitudes de consommation. Vous recevez une alerte avant
+            la coupure, et vous pouvez simuler des recharges pour tester
+            l'application.
+        </p>
+    </div>
+
+    <div class="features">
+        <div class="feature-card reveal reveal-delay-1">
+            <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+            <h3>Estimation précise</h3>
+            <p>Calcul basé sur vos recharges passées avec un algorithme intelligent.</p>
         </div>
-
-        <div class="features">
-            <div class="feature-card reveal reveal-delay-1">
-                <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
-                <h3>Estimation précise</h3>
-                <p>Calcul basé sur vos recharges passées avec un algorithme intelligent.</p>
-            </div>
-            <div class="feature-card reveal reveal-delay-2">
-                <div class="feature-icon"><i class="fas fa-bell"></i></div>
-                <h3>Alerte avant coupure</h3>
-                <p>Choisissez votre délai et recevez une notification avant l'échéance.</p>
-            </div>
-            <div class="feature-card reveal reveal-delay-3">
-                <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
-                <h3>Paiement Mobile Money</h3>
-                <p>Rechargez directement via Orange Money, MTN ou Moov.</p>
-            </div>
+        <div class="feature-card reveal reveal-delay-2">
+            <div class="feature-icon"><i class="fas fa-bell"></i></div>
+            <h3>Alerte avant coupure</h3>
+            <p>Choisissez votre délai et recevez une notification avant l'échéance.</p>
         </div>
+        <div class="feature-card reveal reveal-delay-3">
+            <div class="feature-icon"><i class="fas fa-sim-card"></i></div>
+            <h3>Simulation de recharge</h3>
+            <p>Simulez vos recharges pour tester l'application et voir comment évolue votre solde.</p>
+        </div>
+    </div>
 
-    </section>
+</section>
 
     <!-- ======================================== -->
     <!-- FOOTER                                   -->
@@ -1015,11 +1211,98 @@
     </footer>
 
     <!-- ======================================== -->
+    <!-- MODAL D'INSTALLATION                     -->
+    <!-- ======================================== -->
+    <div class="install-modal" id="installModal">
+        <div class="install-modal-content">
+            <span class="modal-icon">📱</span>
+            <h3>Installer WattSafe ?</h3>
+            <p>Recevez des alertes même hors ligne et accédez plus rapidement à l'application.</p>
+            <div class="modal-actions">
+                <button class="modal-btn modal-btn-cancel" id="modalCancel">Pas maintenant</button>
+                <button class="modal-btn modal-btn-confirm" id="modalConfirm">Installer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================== -->
     <!-- SCRIPTS                                  -->
     <!-- ======================================== -->
     <script>
         // ============================================
-        // 1. ANIMATIONS AU SCROLL
+        // 1. BOUTON "COMMENCER"
+        // ============================================
+        document.getElementById('startBtn').addEventListener('click', function() {
+            window.location.href = 'historique-saisie.html';
+        });
+
+        // ============================================
+        // 2. BOUTON FLOTTANT - COMPORTEMENT AU SCROLL
+        // ============================================
+        const floatBtn = document.getElementById('installFloatBtn');
+
+        window.addEventListener('scroll', function() {
+            const scrollY = window.scrollY;
+            const hero = document.querySelector('.hero');
+            const heroHeight = hero.offsetHeight;
+            
+            if (scrollY > heroHeight * 0.1) {
+                floatBtn.classList.add('scrolling');
+            } else {
+                floatBtn.classList.remove('scrolling');
+            }
+        });
+
+        // ============================================
+        // 3. MODAL D'INSTALLATION
+        // ============================================
+        const installModal = document.getElementById('installModal');
+        const modalCancel = document.getElementById('modalCancel');
+        const modalConfirm = document.getElementById('modalConfirm');
+
+        let deferredPrompt;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            console.log('📱 L\'application peut être installée');
+        });
+
+        floatBtn.addEventListener('click', function() {
+            installModal.classList.add('active');
+        });
+
+        modalCancel.addEventListener('click', function() {
+            installModal.classList.remove('active');
+        });
+
+        modalConfirm.addEventListener('click', function() {
+            installModal.classList.remove('active');
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((result) => {
+                    if (result.outcome === 'accepted') {
+                        console.log('✅ App installée avec succès');
+                        alert('✅ WattSafe a été installé avec succès !');
+                    } else {
+                        console.log('❌ Installation refusée');
+                    }
+                    deferredPrompt = null;
+                });
+            } else {
+                alert('📱 Ouvrez ce site dans Chrome ou Safari, puis appuyez sur "Ajouter à l\'écran d\'accueil"');
+            }
+        });
+
+        // Fermer le modal en cliquant à l'extérieur
+        installModal.addEventListener('click', function(e) {
+            if (e.target === installModal) {
+                installModal.classList.remove('active');
+            }
+        });
+
+        // ============================================
+        // 4. ANIMATIONS AU SCROLL
         // ============================================
         document.addEventListener('DOMContentLoaded', function() {
             const reveals = document.querySelectorAll('.reveal');
@@ -1039,7 +1322,7 @@
         });
 
         // ============================================
-        // 2. GESTION DU THEME LIGHT/DARK
+        // 5. GESTION DU THEME LIGHT/DARK
         // ============================================
         const themeToggle = document.getElementById('themeToggle');
         const body = document.body;
@@ -1058,38 +1341,11 @@
         });
 
         // ============================================
-        // 3. GESTION DU BOUTON INSTALLER (PWA)
-        // ============================================
-        let deferredPrompt;
-
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            console.log('📱 L\'application peut être installée');
-        });
-
-        document.getElementById('installBtn').addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const result = await deferredPrompt.userChoice;
-                if (result.outcome === 'accepted') {
-                    console.log('✅ App installée avec succès');
-                    alert('✅ WattSafe a été installé avec succès !');
-                } else {
-                    console.log('❌ Installation refusée');
-                }
-                deferredPrompt = null;
-            } else {
-                alert('📱 Ouvrez ce site dans Chrome ou Safari, puis appuyez sur "Ajouter à l\'écran d\'accueil"');
-            }
-        });
-
-        // ============================================
-        // 4. DÉTECTION SI L'APP EST DÉJÀ INSTALLÉE
+        // 6. DÉTECTION SI L'APP EST DÉJÀ INSTALLÉE
         // ============================================
         if (window.matchMedia('(display-mode: standalone)').matches) {
-            const btn = document.getElementById('installBtn');
-            btn.innerHTML = '<i class="fas fa-rocket"></i> Ouvrir l\'application';
+            const btn = document.getElementById('startBtn');
+            btn.innerHTML = '<i class="fas fa-rocket"></i> OUVRIR L\'APPLICATION';
         }
 
         console.log('⚡ WattSafe chargé avec succès !');

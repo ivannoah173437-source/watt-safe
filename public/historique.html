@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WattSafe - Historique</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        /* ============================================
+           RESET
+           ============================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #F5F5F5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            min-height: 100vh;
+            transition: background 0.3s ease;
+        }
+
+        body.dark-mode {
+            background: #0A0A0A !important;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            background: #FFFFFF;
+            border-radius: 28px;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+            padding: 24px 20px 16px 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 85vh;
+            max-height: 750px;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        body.dark-mode .container {
+            background: #14141E;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* ============================================
+           HEADER
+           ============================================ */
+        .header-dark {
+            background: #1A1A2E;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            border-radius: 28px 28px 0 0;
+            margin: -24px -20px 16px -20px;
+            padding: 18px 20px 16px 20px;
+        }
+
+        body.dark-mode .header-dark {
+            background: #0A0A12;
+        }
+
+        .header-dark .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-dark .logo .icon {
+            font-size: 20px;
+            color: #FFFFFF;
+        }
+
+        .header-dark .logo h2 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        .header-dark .logo h2 span {
+            color: #3074F9;
+        }
+
+        .header-dark .back-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: none;
+            color: #FFFFFF;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .header-dark .back-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* ============================================
+           STATS
+           ============================================ */
+        .stats-summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 16px;
+            flex-shrink: 0;
+        }
+
+        .stat-card {
+            background: #FAFBFC;
+            border-radius: 14px;
+            padding: 14px 12px;
+            border: 1px solid #E8EDF5;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        body.dark-mode .stat-card {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.06);
+        }
+
+        .stat-card:hover {
+            border-color: #3074F9;
+        }
+
+        body.dark-mode .stat-card:hover {
+            border-color: rgba(48, 116, 249, 0.4);
+        }
+
+        .stat-card .label {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: #6B7A8F;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        body.dark-mode .stat-card .label {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .stat-card .value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1A1A2E;
+            margin-top: 3px;
+        }
+
+        body.dark-mode .stat-card .value {
+            color: #FFFFFF;
+        }
+
+        .stat-card .value.primary {
+            color: #3074F9;
+        }
+
+        body.dark-mode .stat-card .value.primary {
+            color: #3074F9;
+        }
+
+        /* ============================================
+           MOYENNE
+           ============================================ */
+        .avg-display {
+            background: #1A1A2E;
+            border-radius: 12px;
+            padding: 12px 16px;
+            text-align: center;
+            margin-bottom: 16px;
+            flex-shrink: 0;
+        }
+
+        body.dark-mode .avg-display {
+            background: #0A0A12;
+        }
+
+        .avg-display .label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 0.5px;
+        }
+
+        .avg-display .value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #3074F9;
+        }
+
+        /* ============================================
+           LISTE
+           ============================================ */
+        .list-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #6B7A8F;
+            margin-bottom: 10px;
+            flex-shrink: 0;
+        }
+
+        body.dark-mode .list-title {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .recharge-list {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .recharge-list::-webkit-scrollbar {
+            width: 3px;
+        }
+        .recharge-list::-webkit-scrollbar-track {
+            background: #F5F5F5;
+        }
+        .recharge-list::-webkit-scrollbar-thumb {
+            background: #3074F9;
+            border-radius: 4px;
+        }
+
+        .recharge-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 14px;
+            background: #FAFBFC;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            border: 1px solid #E8EDF5;
+            transition: all 0.2s ease;
+        }
+
+        body.dark-mode .recharge-item {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.06);
+        }
+
+        .recharge-item:hover {
+            border-color: #3074F9;
+        }
+
+        .recharge-item .info {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .recharge-item .info .amount {
+            font-weight: 700;
+            font-size: 16px;
+            color: #1A1A2E;
+        }
+
+        body.dark-mode .recharge-item .info .amount {
+            color: #FFFFFF;
+        }
+
+        .recharge-item .info .date {
+            font-size: 12px;
+            color: #6B7A8F;
+        }
+
+        body.dark-mode .recharge-item .info .date {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .recharge-item .badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            background: #E8EDF5;
+            color: #6B7A8F;
+            white-space: nowrap;
+            margin-left: 8px;
+        }
+
+        body.dark-mode .recharge-item .badge {
+            background: rgba(255, 255, 255, 0.06);
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .recharge-item .badge.success {
+            background: #D1FAE5;
+            color: #10B981;
+        }
+
+        body.dark-mode .recharge-item .badge.success {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10B981;
+        }
+
+        .recharge-item .badge.warning {
+            background: #FEF3C7;
+            color: #F59E0B;
+        }
+
+        body.dark-mode .recharge-item .badge.warning {
+            background: rgba(245, 158, 11, 0.15);
+            color: #F59E0B;
+        }
+
+        /* ============================================
+           MESSAGE VIDE
+           ============================================ */
+        .empty-message {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6B7A8F;
+        }
+
+        body.dark-mode .empty-message {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .empty-message i {
+            font-size: 48px;
+            margin-bottom: 12px;
+            display: block;
+            opacity: 0.3;
+        }
+
+        .empty-message h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #1A1A2E;
+        }
+
+        body.dark-mode .empty-message h3 {
+            color: #FFFFFF;
+        }
+
+        .empty-message p {
+            font-size: 14px;
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        .footer {
+            text-align: center;
+            padding: 12px 0 0 0;
+            color: #B0B8C8;
+            font-size: 11px;
+            flex-shrink: 0;
+            margin-top: 12px;
+            border-top: 1px solid #E8EDF5;
+        }
+
+        body.dark-mode .footer {
+            border-color: rgba(255, 255, 255, 0.06);
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 480px) {
+            body {
+                padding: 0;
+                align-items: stretch;
+            }
+
+            .container {
+                max-width: none;
+                border-radius: 0;
+                min-height: 100vh;
+                max-height: none;
+                padding: 0 0 16px 0;
+            }
+
+            .header-dark {
+                border-radius: 0;
+                margin: 0 0 16px 0;
+                padding: 14px 16px;
+            }
+
+            .header-dark .logo h2 {
+                font-size: 15px;
+            }
+
+            .body-steps {
+                padding: 0 16px 16px 16px;
+            }
+
+            .stat-card .value {
+                font-size: 16px;
+            }
+
+            .recharge-item .info .amount {
+                font-size: 15px;
+            }
+
+            .recharge-item .badge {
+                font-size: 10px;
+                padding: 3px 10px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .stats-summary {
+                gap: 8px;
+            }
+
+            .stat-card {
+                padding: 10px 8px;
+            }
+
+            .stat-card .value {
+                font-size: 14px;
+            }
+
+            .recharge-item {
+                padding: 10px 10px;
+            }
+
+            .recharge-item .info .amount {
+                font-size: 14px;
+            }
+
+            .avg-display .value {
+                font-size: 17px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 520px;
+                min-height: 70vh;
+                max-height: 780px;
+                padding: 28px 24px 20px 24px;
+                border-radius: 32px;
+            }
+
+            .header-dark {
+                border-radius: 32px 32px 0 0;
+                margin: -28px -24px 16px -24px;
+                padding: 20px 24px 18px 24px;
+            }
+
+            .header-dark .logo h2 {
+                font-size: 18px;
+            }
+
+            .stat-card .value {
+                font-size: 20px;
+            }
+
+            .avg-display .value {
+                font-size: 22px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .container {
+                max-width: 560px;
+                min-height: 65vh;
+                max-height: 800px;
+                padding: 32px 28px 24px 28px;
+                border-radius: 36px;
+            }
+
+            .header-dark {
+                border-radius: 36px 36px 0 0;
+                margin: -32px -28px 16px -28px;
+                padding: 22px 28px 20px 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- ===== HEADER ===== -->
+        <div class="header-dark">
+            <div class="logo">
+                <span class="icon">⚡</span>
+                <h2>Watt<span>Safe</span></h2>
+            </div>
+            <button class="back-btn" onclick="window.location.href='dashboard.html'">
+                <i class="fas fa-arrow-left"></i> Retour
+            </button>
+        </div>
+
+        <!-- ===== BODY ===== -->
+        <div class="body-steps" style="flex:1; display:flex; flex-direction:column; padding:0 20px;">
+
+            <!-- ===== STATS ===== -->
+            <div class="stats-summary">
+                <div class="stat-card">
+                    <div class="label">💰 Total rechargé</div>
+                    <div class="value primary" id="totalRecharge">0 FCFA</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">📊 Nombre de recharges</div>
+                    <div class="value" id="nbRecharges">0</div>
+                </div>
+            </div>
+
+            <!-- ===== CONSOMMATION MOYENNE ===== -->
+            <div class="avg-display">
+                <div class="label">📈 Consommation moyenne</div>
+                <div class="value" id="avgDisplay">-- FCFA/jour</div>
+            </div>
+
+            <!-- ===== LISTE ===== -->
+            <div class="list-title">📋 Historique des recharges</div>
+            <div class="recharge-list" id="rechargeList">
+                <!-- Les éléments seront ajoutés ici -->
+            </div>
+
+            <!-- ===== FOOTER ===== -->
+            <div class="footer">
+                © 2026 WattSafe
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        // ============================================
+        // 1. CHARGER LES DONNÉES
+        // ============================================
+
+        const recharges = JSON.parse(localStorage.getItem('wattSafeRecharges')) || [];
+        const historique = JSON.parse(localStorage.getItem('wattSafeHistorique')) || [];
+        const currentBalance = parseInt(localStorage.getItem('wattSafeBalance')) || 0;
+
+        // Calcul de la moyenne pondérée (pour la durée estimée)
+        function calculerMoyennePonderee(recharges) {
+            if (recharges.length === 0) return null;
+            let sommeScores = 0,
+                sommeConsoScore = 0;
+            recharges.forEach((r, i) => {
+                const conso = r.montant / r.duree;
+                const score = r.duree * (i + 1);
+                sommeConsoScore += conso * score;
+                sommeScores += score;
+            });
+            return sommeConsoScore / sommeScores;
+        }
+
+        const moyenne = calculerMoyennePonderee(recharges);
+
+        // Combiner les deux sources
+        const allRecharges = [...historique];
+
+        // Trier par date (du plus récent au plus ancien)
+        allRecharges.sort((a, b) => {
+            const dateA = a.date ? new Date(a.date) : new Date(0);
+            const dateB = b.date ? new Date(b.date) : new Date(0);
+            return dateB - dateA;
+        });
+
+        // ============================================
+        // 2. AFFICHER LES STATS
+        // ============================================
+
+        const total = allRecharges.reduce((sum, r) => sum + (r.montant || 0), 0);
+        document.getElementById('totalRecharge').textContent = total.toLocaleString() + ' FCFA';
+        document.getElementById('nbRecharges').textContent = allRecharges.length;
+
+        // Afficher la moyenne
+        const avgDisplay = document.getElementById('avgDisplay');
+        if (moyenne) {
+            avgDisplay.textContent = moyenne.toFixed(0) + ' FCFA/jour';
+        } else if (currentBalance > 0) {
+            // Estimation rapide si pas de recharges historiques
+            const lastRecharge = allRecharges.length > 0 ? allRecharges[0] : null;
+            if (lastRecharge && lastRecharge.duree) {
+                const estim = lastRecharge.montant / lastRecharge.duree;
+                avgDisplay.textContent = estim.toFixed(0) + ' FCFA/jour (estimé)';
+            } else {
+                avgDisplay.textContent = '-- FCFA/jour';
+            }
+        } else {
+            avgDisplay.textContent = '-- FCFA/jour';
+        }
+
+        // ============================================
+        // 3. AFFICHER LA LISTE
+        // ============================================
+
+        const list = document.getElementById('rechargeList');
+
+        if (allRecharges.length === 0) {
+            list.innerHTML = `
+                <div class="empty-message">
+                    <i class="fas fa-inbox"></i>
+                    <h3>Aucune recharge</h3>
+                    <p>Votre historique est vide pour le moment.</p>
+                    <p style="margin-top:8px; font-size:13px; color:#B0B8C8;">
+                        Faites une simulation de recharge dans le dashboard.
+                    </p>
+                </div>
+            `;
+        } else {
+            // Calculer la durée estimée pour chaque recharge
+            list.innerHTML = allRecharges.map((r, index) => {
+                const date = r.date ? new Date(r.date) : new Date();
+                const dateStr = date.toLocaleDateString('fr-FR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                });
+                const timeStr = date.toLocaleTimeString('fr-FR', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                const montant = r.montant || 0;
+
+                // Calculer la durée estimée : montant / moyenne
+                let dureeEstimee = '--';
+                let badgeClass = 'success';
+                if (moyenne && moyenne > 0) {
+                    const duree = Math.floor(montant / moyenne);
+                    dureeEstimee = duree + ' ' + (duree > 1 ? 'jours' : 'jour');
+                    if (duree <= 1) badgeClass = 'warning';
+                } else if (r.duree) {
+                    // Si la durée a été enregistrée (cas des recharges initiales)
+                    dureeEstimee = r.duree + ' ' + (r.duree > 1 ? 'jours' : 'jour');
+                }
+
+                return `
+                    <div class="recharge-item">
+                        <div class="info">
+                            <span class="amount">${montant.toLocaleString()} FCFA</span>
+                            <span class="date">${dateStr} à ${timeStr}</span>
+                        </div>
+                        <span class="badge ${badgeClass}">⏱️ ${dureeEstimee}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ============================================
+        // 4. THEME
+        // ============================================
+
+        const body = document.body;
+        const savedTheme = localStorage.getItem('dashboardTheme') || 'light';
+        if (savedTheme === 'dark') {
+            body.classList.add('dark-mode');
+        }
+
+        // ============================================
+        // 5. VÉRIFICATION CONNEXION
+        // ============================================
+
+        const user = JSON.parse(localStorage.getItem('wattSafeUser'));
+        if (!user) {
+            window.location.href = 'historique-saisie.html';
+        }
+
+        console.log('📋 Page historique chargée');
+        console.log(`📊 ${allRecharges.length} recharges affichées`);
+        console.log(`💰 Total : ${total} FCFA`);
+    </script>
+
+</body>
+</html>

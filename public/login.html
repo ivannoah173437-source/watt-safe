@@ -372,7 +372,7 @@
                 };
 
                 localStorage.setItem('wattSafeUser', JSON.stringify(userData));
-                window.location.href = 'config-recharges.html';
+                window.location.href = 'historique-saisie.html';
 
             } catch (error) {
                 showError('Erreur de connexion. Veuillez réessayer.');
@@ -405,7 +405,7 @@
             };
 
             localStorage.setItem('wattSafeUser', JSON.stringify(userData));
-            window.location.href = 'config-recharges.html';
+            window.location.href = 'historique-saisie.html';
         }
 
         // ============================================
@@ -428,7 +428,7 @@
         if (savedUser) {
             const user = JSON.parse(savedUser);
             if (user.googleId || user.phone) {
-                window.location.href = 'config-recharges.html';
+                window.location.href = 'historique-saisie.html';
             }
         }
     </script>

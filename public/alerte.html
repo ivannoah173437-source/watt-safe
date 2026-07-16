@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WattSafe - Configuration alerte</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        /* ============================================
+           RESET
+           ============================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #F5F5F5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            min-height: 100vh;
+            transition: background 0.3s ease;
+        }
+
+        body.dark-mode {
+            background: #0A0A0A !important;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            background: #FFFFFF;
+            border-radius: 28px;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+            padding: 24px 20px 16px 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 85vh;
+            max-height: 750px;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        body.dark-mode .container {
+            background: #14141E;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* ============================================
+           HEADER
+           ============================================ */
+        .header-dark {
+            background: #1A1A2E;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            border-radius: 28px 28px 0 0;
+            margin: -24px -20px 16px -20px;
+            padding: 18px 20px 16px 20px;
+        }
+
+        body.dark-mode .header-dark {
+            background: #0A0A12;
+        }
+
+        .header-dark .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-dark .logo .icon {
+            font-size: 20px;
+            color: #FFFFFF;
+        }
+
+        .header-dark .logo h2 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        .header-dark .logo h2 span {
+            color: #3074F9;
+        }
+
+        .header-dark .back-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: none;
+            color: #FFFFFF;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .header-dark .back-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* ============================================
+           BODY
+           ============================================ */
+        .body-steps {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 0 0 0 0;
+        }
+
+        /* ============================================
+           ALERTE BANNER
+           ============================================ */
+        .alert-banner {
+            padding: 16px 18px;
+            border-radius: 14px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            border-left: 4px solid;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .alert-banner.active {
+            background: #FEF2F2;
+            border-left-color: #EF4444;
+        }
+
+        .alert-banner.active .alert-icon {
+            color: #EF4444;
+        }
+
+        .alert-banner.active .alert-title {
+            color: #DC2626;
+        }
+
+        .alert-banner.inactive {
+            background: #F0FDF4;
+            border-left-color: #10B981;
+        }
+
+        .alert-banner.inactive .alert-icon {
+            color: #10B981;
+        }
+
+        .alert-banner.inactive .alert-title {
+            color: #10B981;
+        }
+
+        .alert-banner.empty {
+            background: #FAFBFC;
+            border-left-color: #B0B8C8;
+        }
+
+        .alert-banner.empty .alert-icon {
+            color: #B0B8C8;
+        }
+
+        .alert-banner.empty .alert-title {
+            color: #6B7A8F;
+        }
+
+        .alert-banner .alert-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .alert-banner .alert-content {
+            flex: 1;
+        }
+
+        .alert-banner .alert-title {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .alert-banner .alert-message {
+            font-size: 14px;
+            color: #1A1A2E;
+            line-height: 1.5;
+        }
+
+        body.dark-mode .alert-banner .alert-message {
+            color: #FFFFFF;
+        }
+
+        .alert-banner .alert-sub {
+            font-size: 12px;
+            color: #6B7A8F;
+            margin-top: 4px;
+        }
+
+        body.dark-mode .alert-banner .alert-sub {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        body.dark-mode .alert-banner.active {
+            background: rgba(220, 38, 38, 0.15);
+        }
+
+        body.dark-mode .alert-banner.inactive {
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        body.dark-mode .alert-banner.empty {
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        /* ============================================
+           SECTION DÉLAI
+           ============================================ */
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #6B7A8F;
+            margin-bottom: 10px;
+            flex-shrink: 0;
+        }
+
+        body.dark-mode .section-title {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .grid-options {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-shrink: 0;
+        }
+
+        .grid-options .btn-option {
+            padding: 12px 0;
+            background: #FAFBFC;
+            border: 1.5px solid #E8EDF5;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            color: #1A1A2E;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        body.dark-mode .grid-options .btn-option {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.06);
+            color: #FFFFFF;
+        }
+
+        .grid-options .btn-option:active {
+            transform: scale(0.95);
+        }
+
+        .grid-options .btn-option.selected {
+            background: #1A1A2E;
+            border-color: #1A1A2E;
+            color: #FFFFFF;
+        }
+
+        body.dark-mode .grid-options .btn-option.selected {
+            background: #3074F9;
+            border-color: #3074F9;
+            color: #FFFFFF;
+        }
+
+        .grid-options .btn-option .sub {
+            display: block;
+            font-size: 9px;
+            font-weight: 400;
+            opacity: 0.5;
+            margin-top: 1px;
+        }
+
+        .grid-options .btn-option.selected .sub {
+            opacity: 0.7;
+        }
+
+        /* ============================================
+           APERÇU
+           ============================================ */
+        .preview {
+            background: #FAFBFC;
+            border-radius: 12px;
+            padding: 14px 16px;
+            text-align: center;
+            margin-bottom: 16px;
+            border: 1px solid #E8EDF5;
+            flex-shrink: 0;
+        }
+
+        body.dark-mode .preview {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.06);
+        }
+
+        .preview .label {
+            font-size: 11px;
+            color: #6B7A8F;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        body.dark-mode .preview .label {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .preview .date {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1A1A2E;
+            margin-top: 2px;
+        }
+
+        body.dark-mode .preview .date {
+            color: #FFFFFF;
+        }
+
+        .preview .date i {
+            color: #3074F9;
+            margin-right: 6px;
+        }
+
+        .preview .info {
+            font-size: 12px;
+            color: #6B7A8F;
+            margin-top: 4px;
+        }
+
+        body.dark-mode .preview .info {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* ============================================
+           BOUTON ENREGISTRER
+           ============================================ */
+        .btn-save {
+            width: 100%;
+            padding: 14px;
+            background: #1A1A2E;
+            border: none;
+            border-radius: 12px;
+            color: #FFFFFF;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: auto;
+            font-family: inherit;
+        }
+
+        body.dark-mode .btn-save {
+            background: #3074F9;
+        }
+
+        .btn-save:hover {
+            background: #2A2A4E;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(26, 26, 46, 0.2);
+        }
+
+        body.dark-mode .btn-save:hover {
+            background: #1A5CDB;
+            box-shadow: 0 4px 20px rgba(48, 116, 249, 0.3);
+        }
+
+        .btn-save:active {
+            transform: scale(0.98);
+        }
+
+        .btn-save i {
+            font-size: 16px;
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        .footer {
+            text-align: center;
+            padding: 12px 0 0 0;
+            color: #B0B8C8;
+            font-size: 11px;
+            flex-shrink: 0;
+            margin-top: 12px;
+            border-top: 1px solid #E8EDF5;
+        }
+
+        body.dark-mode .footer {
+            border-color: rgba(255, 255, 255, 0.06);
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 480px) {
+            body {
+                padding: 0;
+                align-items: stretch;
+            }
+
+            .container {
+                max-width: none;
+                border-radius: 0;
+                min-height: 100vh;
+                max-height: none;
+                padding: 0 0 16px 0;
+            }
+
+            .header-dark {
+                border-radius: 0;
+                margin: 0 0 16px 0;
+                padding: 14px 16px;
+            }
+
+            .header-dark .logo h2 {
+                font-size: 15px;
+            }
+
+            .body-steps {
+                padding: 0 16px 16px 16px;
+            }
+
+            .grid-options .btn-option {
+                padding: 10px 0;
+                font-size: 13px;
+            }
+
+            .grid-options .btn-option .sub {
+                font-size: 8px;
+            }
+
+            .preview .date {
+                font-size: 16px;
+            }
+
+            .btn-save {
+                padding: 13px;
+                font-size: 15px;
+            }
+
+            .alert-banner {
+                padding: 14px 14px;
+            }
+
+            .alert-banner .alert-title {
+                font-size: 15px;
+            }
+
+            .alert-banner .alert-message {
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .grid-options {
+                gap: 6px;
+            }
+
+            .grid-options .btn-option {
+                padding: 8px 0;
+                font-size: 12px;
+            }
+
+            .preview .date {
+                font-size: 14px;
+            }
+
+            .btn-save {
+                padding: 12px;
+                font-size: 14px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 520px;
+                min-height: 70vh;
+                max-height: 780px;
+                padding: 28px 24px 20px 24px;
+                border-radius: 32px;
+            }
+
+            .header-dark {
+                border-radius: 32px 32px 0 0;
+                margin: -28px -24px 16px -24px;
+                padding: 20px 24px 18px 24px;
+            }
+
+            .header-dark .logo h2 {
+                font-size: 18px;
+            }
+
+            .grid-options .btn-option {
+                padding: 14px 0;
+                font-size: 17px;
+            }
+
+            .preview .date {
+                font-size: 20px;
+            }
+
+            .btn-save {
+                padding: 16px;
+                font-size: 17px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .container {
+                max-width: 560px;
+                min-height: 65vh;
+                max-height: 800px;
+                padding: 32px 28px 24px 28px;
+                border-radius: 36px;
+            }
+
+            .header-dark {
+                border-radius: 36px 36px 0 0;
+                margin: -32px -28px 16px -28px;
+                padding: 22px 28px 20px 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- ===== HEADER ===== -->
+        <div class="header-dark">
+            <div class="logo">
+                <span class="icon">⚡</span>
+                <h2>Watt<span>Safe</span></h2>
+            </div>
+            <button class="back-btn" onclick="window.location.href='dashboard.html'">
+                <i class="fas fa-arrow-left"></i> Retour
+            </button>
+        </div>
+
+        <!-- ===== BODY ===== -->
+        <div class="body-steps">
+
+            <!-- ===== BANNIÈRE D'ALERTE ===== -->
+            <div class="alert-banner empty" id="alertBanner">
+                <div class="alert-icon" id="alertIcon">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <div class="alert-content">
+                    <div class="alert-title" id="alertTitle">Chargement...</div>
+                    <div class="alert-message" id="alertMessage">Veuillez patienter</div>
+                    <div class="alert-sub" id="alertSub"></div>
+                </div>
+            </div>
+
+            <!-- ===== DÉLAI D'ALERTE ===== -->
+            <div class="section-title">⏰ Délai avant l'échéance</div>
+
+            <div class="grid-options" id="optionsGrid">
+                <button class="btn-option" data-value="1">
+                    1j
+                    <span class="sub">jour</span>
+                </button>
+                <button class="btn-option selected" data-value="3">
+                    3j
+                    <span class="sub">jours</span>
+                </button>
+                <button class="btn-option" data-value="5">
+                    5j
+                    <span class="sub">jours</span>
+                </button>
+                <button class="btn-option" data-value="7">
+                    7j
+                    <span class="sub">jours</span>
+                </button>
+            </div>
+
+            <!-- ===== APERÇU ===== -->
+            <div class="preview" id="preview">
+                <div class="label">📅 Prochaine échéance</div>
+                <div class="date" id="previewDate">
+                    <i class="fas fa-calendar-alt"></i> <span id="dateDisplay">--/--/----</span>
+                </div>
+                <div class="info" id="previewInfo">Basé sur votre solde actuel</div>
+            </div>
+
+            <!-- ===== BOUTON ENREGISTRER ===== -->
+            <button class="btn-save" id="btnSave">
+                <i class="fas fa-check-circle"></i> Enregistrer
+            </button>
+
+            <!-- ===== FOOTER ===== -->
+            <div class="footer">
+                © 2026 WattSafe
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        // ============================================
+        // 1. RÉCUPÉRER LES DONNÉES
+        // ============================================
+
+        const recharges = JSON.parse(localStorage.getItem('wattSafeRecharges')) || [];
+        const currentBalance = parseInt(localStorage.getItem('wattSafeBalance')) || 0;
+        let alertDelay = parseInt(localStorage.getItem('wattSafeAlertDelay')) || 3;
+
+        // Calculer la moyenne pondérée
+        function calculerMoyennePonderee(recharges) {
+            if (recharges.length === 0) return null;
+            let sommeScores = 0,
+                sommeConsoScore = 0;
+            recharges.forEach((r, i) => {
+                const conso = r.montant / r.duree;
+                const score = r.duree * (i + 1);
+                sommeConsoScore += conso * score;
+                sommeScores += score;
+            });
+            return sommeConsoScore / sommeScores;
+        }
+
+        const moyenne = calculerMoyennePonderee(recharges);
+
+        // Calculer les jours restants
+        let joursRestants = 0;
+        if (moyenne && currentBalance > 0) {
+            joursRestants = Math.floor(currentBalance / moyenne);
+        }
+
+        // ============================================
+        // 2. METTRE À JOUR LA BANNIÈRE D'ALERTE
+        // ============================================
+
+        function updateAlertBanner() {
+            const banner = document.getElementById('alertBanner');
+            const icon = document.getElementById('alertIcon');
+            const title = document.getElementById('alertTitle');
+            const message = document.getElementById('alertMessage');
+            const sub = document.getElementById('alertSub');
+
+            // Cas 1 : Pas de solde
+            if (currentBalance === 0 || !moyenne) {
+                banner.className = 'alert-banner empty';
+                icon.innerHTML = '<i class="fas fa-bell-slash"></i>';
+                title.textContent = 'Aucun solde disponible';
+                message.textContent = 'Faites une simulation de recharge pour activer l\'alerte.';
+                sub.textContent = '💡 Simulation disponible dans le dashboard';
+                return;
+            }
+
+            // Cas 2 : Alerte active (jours restants <= délai configuré)
+            if (joursRestants <= alertDelay && joursRestants > 0) {
+                banner.className = 'alert-banner active';
+                icon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+
+                if (joursRestants === 1) {
+                    title.textContent = '🚨 ALERTE ! Votre crédit expire demain !';
+                    message.textContent = 'Rechargez immédiatement pour éviter la coupure.';
+                } else {
+                    title.textContent = `🔴 ALERTE ! Votre crédit expire dans ${joursRestants} jours.`;
+                    message.textContent = `Vous avez ${joursRestants} jours pour recharger avant la coupure.`;
+                }
+                sub.textContent = `💰 Solde : ${currentBalance.toLocaleString()} FCFA · Délai configuré : ${alertDelay} jours`;
+
+            // Cas 3 : Crédit expiré
+            } else if (joursRestants <= 0) {
+                banner.className = 'alert-banner active';
+                icon.innerHTML = '<i class="fas fa-times-circle"></i>';
+                title.textContent = '⛔ Votre crédit est expiré !';
+                message.textContent = 'Rechargez immédiatement pour rétablir votre service.';
+                sub.textContent = `💰 Solde : ${currentBalance.toLocaleString()} FCFA`;
+
+            // Cas 4 : Pas d'alerte (jours restants > délai configuré)
+            } else {
+                banner.className = 'alert-banner inactive';
+                icon.innerHTML = '<i class="fas fa-check-circle"></i>';
+                title.textContent = '✅ Pas d\'alerte active';
+                message.textContent = `Vous êtes tranquille pour ${joursRestants} jours.`;
+                sub.textContent = `💰 Solde : ${currentBalance.toLocaleString()} FCFA · Prochaine alerte dans ${joursRestants - alertDelay} jours`;
+            }
+
+            // Mettre à jour l'aperçu de l'échéance
+            updatePreview();
+        }
+
+        // ============================================
+        // 3. METTRE À JOUR L'APERÇU
+        // ============================================
+
+        function updatePreview() {
+            const now = new Date();
+            const echeance = new Date(now);
+            echeance.setDate(echeance.getDate() + joursRestants);
+
+            const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+            const dateStr = echeance.toLocaleDateString('fr-FR', options);
+
+            document.getElementById('dateDisplay').textContent = dateStr;
+
+            const info = document.getElementById('previewInfo');
+            if (currentBalance === 0 || !moyenne) {
+                info.textContent = 'Aucun solde pour estimer une échéance';
+            } else {
+                info.textContent = `Solde : ${currentBalance.toLocaleString()} FCFA · ${joursRestants} jours restants`;
+            }
+        }
+
+        // ============================================
+        // 4. GESTION DES OPTIONS DE DÉLAI
+        // ============================================
+
+        const options = document.querySelectorAll('.btn-option');
+
+        // Sélectionner l'option enregistrée
+        options.forEach(btn => {
+            if (parseInt(btn.dataset.value) === alertDelay) {
+                btn.classList.add('selected');
+            } else {
+                btn.classList.remove('selected');
+            }
+        });
+
+        options.forEach(btn => {
+            btn.addEventListener('click', function() {
+                options.forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                alertDelay = parseInt(this.dataset.value);
+                updateAlertBanner();
+            });
+        });
+
+        // ============================================
+        // 5. BOUTON ENREGISTRER
+        // ============================================
+
+        document.getElementById('btnSave').addEventListener('click', function() {
+            localStorage.setItem('wattSafeAlertDelay', alertDelay);
+
+            // Mettre à jour l'utilisateur
+            const user = JSON.parse(localStorage.getItem('wattSafeUser'));
+            if (user) {
+                user.alertDelay = alertDelay;
+                localStorage.setItem('wattSafeUser', JSON.stringify(user));
+            }
+
+            // Feedback
+            this.innerHTML = '<i class="fas fa-check-circle"></i> ✅ Enregistré !';
+            this.style.background = '#10B981';
+
+            setTimeout(() => {
+                this.innerHTML = '<i class="fas fa-check-circle"></i> Enregistrer';
+                this.style.background = '';
+                window.location.href = 'dashboard.html';
+            }, 1500);
+        });
+
+        // ============================================
+        // 6. THEME
+        // ============================================
+
+        const body = document.body;
+        const savedTheme = localStorage.getItem('dashboardTheme') || 'light';
+        if (savedTheme === 'dark') {
+            body.classList.add('dark-mode');
+        }
+
+        // ============================================
+        // 7. INITIALISATION
+        // ============================================
+
+        // Vérifier si l'utilisateur est connecté
+        const user = JSON.parse(localStorage.getItem('wattSafeUser'));
+        if (!user) {
+            window.location.href = 'historique-saisie.html';
+        }
+
+        updateAlertBanner();
+
+        console.log('⚡ Page alerte chargée');
+        console.log(`⏰ Délai configuré : ${alertDelay} jours`);
+        console.log(`📊 Jours restants : ${joursRestants}`);
+        console.log(`💰 Solde : ${currentBalance} FCFA`);
+    </script>
+
+</body>
+</html>
